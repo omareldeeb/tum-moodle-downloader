@@ -2,7 +2,7 @@ from authentication import start_session
 from bs4 import BeautifulSoup
 
 
-def list_courses(semester):
+def list_courses(semester='all'):
     driver = start_session()
     select_term = driver.find_element_by_id('coc-filterterm')
     select_term.click()

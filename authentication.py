@@ -2,12 +2,18 @@ from getpass import getpass
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
+import sys
 
 AUTH_LINK = 'https://www.moodle.tum.de/Shibboleth.sso/Login?providerId=https%3A%2F%2Ftumidp.lrz.de%2Fidp%2Fshibboleth' \
             '&target=https%3A%2F%2Fwww.moodle.tum.de%2Fauth%2Fshibboleth%2Findex.php '
-CHROME_PATH = r'chrome/Chrome.app/Contents/MacOS/Google Chrome'
-DRIVER_PATH = r'chrome/chromedriver'
-
+CHROME_PATH = ''
+DRIVER_PATH = ''
+if sys.platform == 'darwin':
+    CHROME_PATH = 'chrome/MacOS/Chrome.app/Contents/MacOS/Google Chrome'
+    DRIVER_PATH = 'chrome/MacOS/chromedriver'
+else:
+    print('Operating System not supported')
+    exit()
 chrome_options = Options()
 chrome_options.binary_location = CHROME_PATH
 chrome_options.add_argument('--headless')
@@ -26,7 +32,7 @@ def start_session():
     driver.find_element_by_name('_eventId_proceed').click()
 
     save_cookies(driver.get_cookies())
-    driver.get(r'https://www.moodle.tum.de/my/')
+    driver.get('https://www.moodle.tum.de/my/')
     return driver
 
 
