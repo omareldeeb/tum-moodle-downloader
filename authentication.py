@@ -32,7 +32,7 @@ def start_session(username, password):
 
     save_cookies(driver.get_cookies())
     driver.get('https://www.moodle.tum.de/my/')
-    print('authentication successful')
+    print('\tauthentication successful')
     return driver, session
 
 

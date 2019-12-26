@@ -32,5 +32,5 @@ def setup_env():
 if __name__ == "__main__":
     setup_env()
     import course_retrieval  # import only valid after setting up environment
-    course = course_retrieval.get_course('MA0902')
-    course.get_weeks()
+    course = course_retrieval.get_course('Analysis')
+    course.download_resource('Hausaufgabe 9')

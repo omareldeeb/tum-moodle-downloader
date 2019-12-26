@@ -28,11 +28,11 @@ def list_courses():
     for div in soup.find_all('div', class_='termdiv coc-term-' + semester):
         title = div.find('h3').find('a').get('title')
         courses.append(title)
-        print(title)
+        print('\t' + title)
     return courses
 
 
-def get_course(course_id):
+def get_course(course_name):
     driver, session = start_session(username, password)
     select_term = driver.find_element_by_id('coc-filterterm')
     select_term.click()
@@ -43,5 +43,5 @@ def get_course(course_id):
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     for div in soup.find_all('div', class_='termdiv coc-term-' + semester):
         course = div.find('h3').find('a')
-        if course_id in course.get('title'):
+        if course_name in course.get('title'):
             return Course(course.get('href'), session)
