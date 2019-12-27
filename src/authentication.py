@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.common.exceptions import WebDriverException
 import requests
 
 AUTH_LINK = 'https://www.moodle.tum.de/Shibboleth.sso/Login?providerId=https%3A%2F%2Ftumidp.lrz.de%2Fidp%2Fshibboleth' \
@@ -15,10 +16,14 @@ session = requests.Session()
 
 def start_session(username, password):
     print('Starting Moodle session...')
-    driver.get(AUTH_LINK)
-    driver.find_element_by_id('username').send_keys(username)
-    driver.find_element_by_id('password').send_keys(password)
-    driver.find_element_by_name('_eventId_proceed').click()
+    try:
+        driver.get(AUTH_LINK)
+        driver.find_element_by_id('username').send_keys(username)
+        driver.find_element_by_id('password').send_keys(password)
+        driver.find_element_by_name('_eventId_proceed').click()
+    except WebDriverException:
+        print('Webdriver crashed unexpectedly. Try restarting the docker container.')
+        exit()
 
     save_cookies(driver.get_cookies())
     driver.get('https://www.moodle.tum.de/my/')
