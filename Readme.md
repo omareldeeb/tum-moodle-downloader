@@ -37,9 +37,13 @@ to remove **all** stopped containers.
 
 Examples
 ---
-`$ python3 src/main.py -c 'Analysis' -f 'Hausaufgabe 10' -p '~/Documents/Uni/WS19/Analysis/Hausaufgaben'`  
+* `$ python3 src/main.py -c 'Analysis' -f 'Hausaufgabe 10' -p '~/Documents/Uni/WS19/Analysis/Hausaufgaben'`  
 will search the given semester's courses (saved in _config.json_) for `'Analysis'`
 to find the course 'Analysis für Informatik [MA0902]'. In this course, the script
 will search for `'Hausaufgabe 10'` to find the assignment 'Hausaufgabe 10 und Präsenzaufgaben der Woche'.
 The script will then navigate to the assignment's page and download the associated file: 'Blatt10.pdf', which
 will then be saved in the specified path `'~/Documents/Uni/WS19/Analysis/Hausaufgaben'`.
+
+* `$ python3 src/main.py -c 'Analysis' -f 'Hausaufgabe' -p '~/Documents/Uni/WS19/Analysis/Hausaufgaben'`  
+similar to above, however downloads **all** files that match to 'Hausaufgabe'
+into the specified path.
