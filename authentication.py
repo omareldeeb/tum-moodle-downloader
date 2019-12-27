@@ -1,9 +1,7 @@
-from getpass import getpass
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
 import sys
-import os
 
 AUTH_LINK = 'https://www.moodle.tum.de/Shibboleth.sso/Login?providerId=https%3A%2F%2Ftumidp.lrz.de%2Fidp%2Fshibboleth' \
             '&target=https%3A%2F%2Fwww.moodle.tum.de%2Fauth%2Fshibboleth%2Findex.php '
@@ -32,7 +30,10 @@ def start_session(username, password):
 
     save_cookies(driver.get_cookies())
     driver.get('https://www.moodle.tum.de/my/')
-    print('\tauthentication successful')
+    if driver.current_url != 'https://www.moodle.tum.de/my/':
+        print('Authentication failed. Please check your credentials.')
+        exit()
+    print('authentication successful')
     return driver, session
 
 

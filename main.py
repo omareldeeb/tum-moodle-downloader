@@ -1,6 +1,39 @@
 import json
 import os
 from getpass import getpass
+import argparse
+
+
+def get_download_arguments():
+    ap = argparse.ArgumentParser(description='Automatically download files, folders and assignment material from TUM '
+                                             'Moodle')
+    ap.add_argument(
+        '-c',
+        '--course',
+        dest='course',
+        metavar='COURSE',
+        type=str,
+        required=True,
+        help='Course to download material from.'
+    )
+    ap.add_argument(
+        '-f',
+        '--file',
+        dest='file',
+        type=str,
+        required=True,
+        help='File to download'
+    )
+    ap.add_argument(
+        '-p',
+        '--path',
+        dest='path',
+        type=str,
+        required=False,
+        default='./',
+        help='Path to save downloaded resource. (Default: current directory)'
+    )
+    return ap.parse_args()
 
 
 def setup_env():
@@ -15,6 +48,7 @@ def setup_env():
                 print('Check config.json file')
                 exit()
     else:
+        print('config.json file not found. Setting up new config.json file...')
         config_data = {
             "username": input('Enter username or email (e.g. go42tum/example@tum.de)\n'),
             "password": getpass('Enter password: '),
@@ -32,5 +66,10 @@ def setup_env():
 if __name__ == "__main__":
     setup_env()
     import course_retrieval  # import only valid after setting up environment
-    course = course_retrieval.get_course('Analysis')
-    course.download_resource('Hausaufgabe 9')
+    download_args = get_download_arguments()
+    course_name = download_args.course
+    file = os.path.expanduser(download_args.file)
+    path = os.path.expanduser(download_args.path)
+
+    course = course_retrieval.get_course(course_name)
+    course.download_resource(file, path)
