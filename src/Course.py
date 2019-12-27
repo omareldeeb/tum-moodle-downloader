@@ -68,6 +68,7 @@ class Course:
                 os.mkdir(path)
             except FileNotFoundError:
                 print('Could not create path. Please check the given path and try again.')
+                exit()
         found = False
         print('Searching for resource: ' + name)
         for section in self.sections:
