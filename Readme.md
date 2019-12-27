@@ -41,5 +41,5 @@ Examples
 will search the given semester's courses (saved in _config.json_) for `'Analysis'`
 to find the course 'Analysis für Informatik [MA0902]'. In this course, the script
 will search for `'Hausaufgabe 10'` to find the assignment 'Hausaufgabe 10 und Präsenzaufgaben der Woche'.
-The script will then navigate to the assignment's page and download the associated file: Blatt10.pdf, which
+The script will then navigate to the assignment's page and download the associated file: 'Blatt10.pdf', which
 will then be saved in the specified path `'~/Documents/Uni/WS19/Analysis/Hausaufgaben'`.
