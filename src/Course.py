@@ -64,7 +64,10 @@ class Course:
         """
         if not os.path.exists(path):
             print(path + ' not found. Creating path: ' + path)
-            os.mkdir(path)
+            try:
+                os.mkdir(path)
+            except FileNotFoundError:
+                print('Could not create path. Please check the given path and try again.')
         found = False
         print('Searching for resource: ' + name)
         for section in self.sections:
