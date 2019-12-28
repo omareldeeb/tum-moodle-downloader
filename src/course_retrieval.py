@@ -1,4 +1,4 @@
-from authentication import start_session
+from authentication import start_session, container
 from bs4 import BeautifulSoup
 import os
 from Course import Course

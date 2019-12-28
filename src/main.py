@@ -73,3 +73,5 @@ if __name__ == "__main__":
 
     course = course_retrieval.get_course(course_name)
     course.download_resource(file, path)
+
+    course_retrieval.container.stop()
