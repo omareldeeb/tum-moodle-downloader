@@ -2,6 +2,8 @@ import json
 import os
 from getpass import getpass
 import argparse
+import authentication
+import course_retrieval
 
 
 def get_download_arguments():
@@ -65,13 +67,20 @@ def setup_env():
 
 if __name__ == "__main__":
     setup_env()
-    import course_retrieval  # import only valid after setting up environment
-    download_args = get_download_arguments()
-    course_name = download_args.course
-    file = os.path.expanduser(download_args.file)
-    path = os.path.expanduser(download_args.path)
+    session = authentication.start_session(
+        os.environ['USERNAME'],
+        os.environ['USERNAME']
+    )
 
-    course = course_retrieval.get_course(course_name)
-    course.download_resource(file, path)
-
-    course_retrieval.container.stop()
+    course = course_retrieval.get_course(session, 'anal')
+    print(course)
+    # import course_retrieval  # import only valid after setting up environment
+    # download_args = get_download_arguments()
+    # course_name = download_args.course
+    # file = os.path.expanduser(download_args.file)
+    # path = os.path.expanduser(download_args.path)
+    #
+    # course = course_retrieval.get_course(course_name)
+    # course.download_resource(file, path)
+    #
+    # course_retrieval.container.stop()
