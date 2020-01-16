@@ -23,7 +23,7 @@ specified `PATH`
 Examples
 ---
 * `$ python3 src/main.py -c 'Analysis' -f 'Hausaufgabe 10' -p '~/Documents/Uni/WS19/Analysis/Hausaufgaben'`  
-will search the given semester's courses (saved in _config.json_) for `'Analysis'`
+will search the user's courses for `'Analysis'`
 and find the course 'Analysis für Informatik [MA0902]'. In this example, the script
 will search for `'Hausaufgabe 10'` and find the assignment 'Hausaufgabe 10 und Präsenzaufgaben der Woche'.
 The script will then navigate to the assignment's page and download the associated file: 'Blatt10.pdf', which
