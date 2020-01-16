@@ -8,12 +8,9 @@ Requirements
 To install all requirements run:
 
     `$ pip3 install -r requirements.txt`
-* [Docker](https://www.docker.com/get-started) for remote access
-to Selenium Webdriver that powers this crawler.
 
 Quick Start
 ---
-*Assuming Docker is installed and running,*
 
 * run  
 `$ python3 src/main.py -c COURSE -f FILE [-p PATH]`  
@@ -21,9 +18,7 @@ to
 download the specified `FILE` from the specified `COURSE` into the
 specified `PATH`
     * _Running for the first time will prompt user for TUM Moodle
-    credentials and semester and store them in a config.json file_
-    * _This might take some time to run for the first time, as the docker
-    image needs to be pulled_
+    credentials and semester and store them in a credentials.json file_
 
 Examples
 ---
