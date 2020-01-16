@@ -39,29 +39,25 @@ def get_download_arguments():
 
 
 def setup_env():
-    if os.path.isfile('config.json'):
-        with open('config.json', 'r') as f:
+    if os.path.isfile('credentials.json'):
+        with open('credentials.json', 'r') as f:
             config_data = json.load(f)
             try:
                 os.environ['USERNAME'] = config_data['username']
                 os.environ['PASSWORD'] = config_data['password']
-                os.environ['SEMESTER'] = config_data['semester']
             except KeyError:
-                print('Check config.json file')
+                print('Check credentials.json file')
                 exit()
     else:
-        print('config.json file not found. Setting up new config.json file...')
+        print('credentials.json file not found. Setting up new credentials.json file...')
         config_data = {
             "username": input('Enter username or email (e.g. go42tum/example@tum.de)\n'),
             "password": getpass('Enter password: '),
-            "semester": input('Enter semester in "YEAR-TERM" format. '
-                              'e.g. "2019-2" for Winter Semester 2019/2020 or "2018-1" for Summer Semester 2018\n')
         }
         os.environ['USERNAME'] = config_data['username']
         os.environ['PASSWORD'] = config_data['password']
-        os.environ['SEMESTER'] = config_data['semester']
         config_json = json.dumps(config_data)
-        with open('config.json', 'w') as f:
+        with open('credentials.json', 'w') as f:
             f.write(config_json)
 
 
@@ -69,18 +65,14 @@ if __name__ == "__main__":
     setup_env()
     session = authentication.start_session(
         os.environ['USERNAME'],
-        os.environ['USERNAME']
+        os.environ['PASSWORD']
     )
 
-    course = course_retrieval.get_course(session, 'anal')
-    print(course)
-    # import course_retrieval  # import only valid after setting up environment
-    # download_args = get_download_arguments()
-    # course_name = download_args.course
-    # file = os.path.expanduser(download_args.file)
-    # path = os.path.expanduser(download_args.path)
-    #
-    # course = course_retrieval.get_course(course_name)
-    # course.download_resource(file, path)
-    #
-    # course_retrieval.container.stop()
+    # print(course)
+    download_args = get_download_arguments()
+    course_name = download_args.course
+    file = os.path.expanduser(download_args.file)
+    path = os.path.expanduser(download_args.path)
+
+    course = course_retrieval.get_course(session, course_name)
+    course.download_resource(file, path)

@@ -46,9 +46,9 @@ def get_course(session, course_name) -> Course or None:
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    print(soup)
+    # print(soup)
     courses = soup.find_all('div', {'class': 'coursebox'})
-    print(courses)
+    # print(courses)
 
     for course_div in courses:
         course = course_div.find('h3').find('a')

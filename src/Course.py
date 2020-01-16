@@ -16,7 +16,7 @@ class Course:
         file = self.session.get(url)
         filename = os.path.basename(file.url)
         if '?forcedownload=1' in filename:
-            filename = filename.replace('?forcedownload=1', '')
+            filename = filename.replace('?forcedownload=1', '')  # Removes 'forcedownload=1' parameter from the url
         path = os.path.join(path, filename)
         with open(path, 'wb') as f:
             f.write(file.content)
@@ -24,17 +24,17 @@ class Course:
 
     def _download_folder(self, url, path):
         print('Downloading folder...')
-        soup = BeautifulSoup(self.session.get(url).content, 'html.parser')
-        dir_name = soup.find('div', role='main').find('h2').contents[0]
-        print('Creating directory: ' + dir_name)
+        soup = BeautifulSoup(self.session.get(url).content, 'html.parser')  # Get folder page
+        dir_name = soup.find('div', role='main').find('h2').contents[0]  # Find folder title
+        print('Creating directory: ' + dir_name)  # Create the directory
         os.mkdir(os.path.join(path, dir_name))
-        files = soup.find_all('span', class_='fp-filename')
+        files = soup.find_all('span', class_='fp-filename')  # Finds all files in folder page
         for file in files:
             if len(file.contents) < 1:
                 continue
             filename = file.contents[0]
             url = file.parent['href']
-            self._download_file(url, dir_name + '/' + filename)
+            self._download_file(url, os.path.join(path, dir_name))
 
     def _download_assignment(self, url, path):
         print('Extracting file from assignment...')
