@@ -38,7 +38,7 @@ def get_download_arguments():
     return ap.parse_args()
 
 
-def setup_env():
+def setup_credentials():
     if os.path.isfile('credentials.json'):
         with open('credentials.json', 'r') as f:
             config_data = json.load(f)
@@ -47,7 +47,7 @@ def setup_env():
                 os.environ['PASSWORD'] = config_data['password']
             except KeyError:
                 print('Check credentials.json file')
-                exit()
+                exit(1)
     else:
         print('credentials.json file not found. Setting up new credentials.json file...')
         config_data = {
@@ -62,11 +62,14 @@ def setup_env():
 
 
 if __name__ == "__main__":
-    setup_env()
+    setup_credentials()
     session = authentication.start_session(
         os.environ['USERNAME'],
         os.environ['PASSWORD']
     )
+    if session is None:
+        print('Could not start session.')
+        exit(1)
 
     # print(course)
     download_args = get_download_arguments()
@@ -75,4 +78,8 @@ if __name__ == "__main__":
     path = os.path.expanduser(download_args.path)
 
     course = course_retrieval.get_course(session, course_name)
+    if course is None:
+        print('Could not find course ' + course_name + '. Listing available courses: ')
+        course_retrieval.list_courses(session)
+        exit(1)
     course.download_resource(file, path)

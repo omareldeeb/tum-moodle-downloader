@@ -11,7 +11,8 @@ proxies = {
 headers = {
     'user-agent': 'Mozilla/5.0',
     'content-type': 'application/x-www-form-urlencoded',
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,'
+              'application/signed-exchange;v=b3;q=0.9',
 }
 
 
@@ -44,6 +45,10 @@ def start_session(username, password) -> requests.Session or None:
         proxies=proxies,
         verify=True,
     )
+
+    if response.status_code != 200:
+        return None
+
     soup = BeautifulSoup(response.text, 'html.parser')
 
     action_url = _find_action_url(soup)
@@ -63,13 +68,20 @@ def start_session(username, password) -> requests.Session or None:
         proxies=proxies,
         verify=True,
     )
+    if response.status_code != 200:
+        return None
+
     soup = BeautifulSoup(response.text, 'html.parser')
     action_url, sso_data = _find_sso_data(soup)
-    response = session.post(
-        f'{action_url}',
-        headers=headers,
-        data=sso_data
-    )
+    try:
+        response = session.post(
+            f'{action_url}',
+            headers=headers,
+            data=sso_data
+        )
+    except requests.exceptions.MissingSchema:
+        print('Error while authenticating. Check credentials.')
+        return None
     if response.status_code == 200:
         return session
     return None
