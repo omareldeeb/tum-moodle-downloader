@@ -32,7 +32,6 @@ class Course:
         for file in files:
             if len(file.contents) < 1:
                 continue
-            filename = file.contents[0]
             url = file.parent['href']
             self._download_file(url, os.path.join(path, dir_name))
 
@@ -90,7 +89,7 @@ class Course:
                         found = True
                         self._download_assignment(resource.find('a')['href'], path)
         if not found:
-            print('No resources found matching ' + name)
+            print('No resources found matching ' + name )
 
     def download_latest_resources(self):
         latest_section = self.soup.find('li', class_='section main clearfix current')
@@ -102,12 +101,14 @@ class Course:
             self.download_resource(resource_name)
 
     def list_all_resources(self):
-        print('Listing all course resources:\n')
+        print('Listing all available resources:\n')
         for section in self.sections:
             resources = section.find_all('div', class_='activityinstance')
             for resource in resources:
                 resource_type = self._get_resource_type(resource)
-                print(resource.find('span', class_='instancename').contents[0] + ' ---- type: ' + resource_type)
+                if resource_type == 'file' or resource_type == 'folder' or resource_type == 'assignment':
+                    print(resource.find('span', class_='instancename').contents[
+                              0].strip() + ' ---- type: ' + resource_type)
 
     def list_recent_resources(self):
         print('Listing recent resources:\n')
