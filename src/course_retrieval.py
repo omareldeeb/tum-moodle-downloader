@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from Course import Course
+from course import Course
 
 
 def list_courses(session):

@@ -9,7 +9,7 @@ class Course:
         self.course_page = self.session.get(self.link).content
         self.soup = BeautifulSoup(self.course_page, 'html.parser').find('ul', class_='weeks')
         self.sections = self.soup.find_all('li', class_='section main clearfix')  # All sections
-        self.sections.append(self.soup.find('li', class_='section main clearfix current'))  # Latest section
+        self.sections += (self.soup.find_all('li', class_='section main clearfix current'))  # Latest section
 
     def _download_file(self, url, path):
         print('Downloading file...')
@@ -73,8 +73,8 @@ class Course:
         for section in self.sections:
             resources = section.find_all('div', class_='activityinstance')
             for resource in resources:
-                found_name = resource.find('span', class_='instancename').contents[0]
-                if name in found_name:
+                found_name = resource.find('span', class_='instancename').contents[0].lower()
+                if name.lower() in found_name:
                     resource_type = self._get_resource_type(resource)
                     if resource_type == 'file':
                         print('Found file: ' + found_name)
@@ -119,3 +119,4 @@ class Course:
         for resource in latest_resources:
             resource_type = self._get_resource_type(resource)
             print(resource.find('span', class_='instancename').contents[0] + ' ---- type: ' + resource_type)
+
