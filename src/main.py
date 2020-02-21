@@ -62,17 +62,19 @@ if __name__ == "__main__":
         exit(1)
 
     course_name = args['course']
+    course = course_retrieval.get_course(session, course_name)
+    if course_name is not None and course is None:
+        print('Could not find course: ' + course_name)
+        exit(1)
     if args['mode'] == 'list':
         if course_name is None:
             print('Listing available courses: ')
             course_retrieval.list_courses(session)
             exit(0)
         else:
-            course = course_retrieval.get_course(session, course_name)
             course.list_all_resources()
             exit(0)
     elif args['mode'] == 'download':
         file = args['file']
         path = './' if args['path'] is None else args['path']
-        course = course_retrieval.get_course(session, course_name)
         course.download_resource(file, path)
