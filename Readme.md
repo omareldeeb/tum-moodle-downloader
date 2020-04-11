@@ -2,12 +2,16 @@
 *A python-built web crawler to automate file downloads off of
 https://www.moodle.tum.de/*
 
+Prerequisites
+---
+* [Python](https://www.python.org/) (>= 3.4) including `pip` installed and available via the command line.
+
 Requirements
 ---
 * Python requirements as specified in requirements.txt.
-To install all requirements run:
-
-    `$ pip3 install -r requirements.txt`
+To install all requirements run:  
+`$ pip3 install -r requirements.txt`
+* Note: use `pip` instead of `pip3` on Windows.
 
 Quick Start
 ---
@@ -19,19 +23,21 @@ download `file`(s) from a `course` into a `destination` path
 * run  
 `$ python3 src/main.py list [course]`
 to list available resources of the specified `course` or, if no course is specified, list available courses
-* run
-`$ python3 src/main.py -h`
-for general help
-* run
-`$ python3 src/main.py list -h`
+* run  
+`$ python3 src/main.py -h`  
+for general help on how to use the program
+* run  
+`$ python3 src/main.py list -h`  
 for help concerning the `list` command
-* run
-`$ python3 src/main.py download -h`
+* run  
+`$ python3 src/main.py download -h`  
 for help concerning the `download` command
 * Note:
-    * _Running for the first time will prompt user for TUM Moodle
-    credentials and semester and store them in a credentials.json file_
-    * Use `python` instead of `python3` on Windows
+    * Upon running one of the commands you will be prompted to enter your Moodle credentials.
+    The username will be stored in a `config.json` in the `src` directory.
+    _You may also manually add your password to the `config.json`, if you don't want to type it every time you run the script.
+    This is discouraged though as your password will be stored in **plain text**!_
+    * Use `python` instead of `python3` on Windows.
 
 Examples
 ---
