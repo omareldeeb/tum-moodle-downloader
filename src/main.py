@@ -4,7 +4,8 @@ import sys
 import argparse
 from pathlib import Path
 from getpass import getpass
-
+import json
+import re
 
 import authentication
 import course_retrieval
@@ -56,12 +57,55 @@ def list_resources(args, session):
 
 
 def download(args, session):
+    print(args)
     course_name = args.course
     file_name = args.file
     destination_path = args.destination
-    course = course_retrieval.get_course(session, course_name)
 
-    course.download_resource(file_name, destination_path)
+    if destination_path is None:
+        if file_name is None:
+            file_name = ".*"
+        if course_name is None:
+            course_name = ".*"
+        download_via_config(session, course_name, file_name)
+    else:
+        course = course_retrieval.get_course(session, course_name)
+        course.download_resource(file_name, destination_path)
+
+
+def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
+    print("Downloading via download config ...")
+
+    # TODO: check if requested file course name and requested file pattern exist in the config file
+    req_course_name = re.compile(req_course_name)
+    req_file_pattern = re.compile(req_file_pattern)
+
+    with open(CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+        config_data = json.load(json_file)
+
+    for course_config in config_data:
+        course_name = course_config.get('course_name', None)
+        if not re.match(req_course_name, course_name):
+            continue
+
+        semester = course_config.get('semester', None)
+        rules = course_config.get('rules', [])
+
+        course = course_retrieval.get_course(session, course_name)
+        if course is None:
+            continue
+
+        resource_names = course.get_resource_names()
+        for resource_name in resource_names:
+            if not re.match(req_file_pattern, resource_name):
+                continue
+            for rule in rules:
+                file_pattern = re.compile(rule.get('file_pattern', None))
+                destination = rule.get('destination', None)
+                if re.match(file_pattern, resource_name):
+                    course.download_resource(resource_name, destination)
+                    break
+    print("Done downloading via download config.")
 
 
 if __name__ == "__main__":
@@ -71,7 +115,7 @@ if __name__ == "__main__":
     # Add subparsers for the different available commands
     subparsers = arg_parser.add_subparsers()
 
-    list_command_description = "list available resources of the specified 'course' " \
+    list_command_description = "List available resources of the specified 'course' " \
                                "or, if no course is specified, list available courses"
     list_parser = subparsers.add_parser("list",
                                         description=list_command_description,
@@ -84,21 +128,23 @@ if __name__ == "__main__":
     # Set the function which is to be executed, if the 'list' command is provided
     list_parser.set_defaults(func=list_resources)
 
-    download_command_description = "download 'file'(s) from a 'course' into a 'destination' path"
+    download_command_description = "Download 'file'(s) from a 'course' into a 'destination' path. " \
+                                   "If parameters are omitted they are retrieved from  'src/download_config.json'"
     download_parser = subparsers.add_parser("download",
                                             description=download_command_description,
                                             help=download_command_description,
                                             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     download_parser.add_argument('course',
                                  type=str,
+                                 nargs='?',
                                  help="name of the course from which to download")
     download_parser.add_argument('file',
                                  type=str,
+                                 nargs='?',
                                  help="name pattern for the files which are to be downloaded")
     download_parser.add_argument('destination',
                                  type=str,
                                  nargs='?',
-                                 default='./moodle_downloads/',
                                  help="path at which the download(s) should be stored")
     # Set the function which is to be executed, if the 'download' command is provided
     download_parser.set_defaults(func=download)

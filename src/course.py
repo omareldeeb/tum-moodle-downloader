@@ -64,7 +64,7 @@ class Course:
         if not os.path.exists(path):
             print(path + ' not found. Creating path: ' + path)
             try:
-                os.mkdir(path)
+                os.makedirs(path)
             except FileNotFoundError:
                 print('Could not create path. Please check the given path and try again.')
                 exit()
@@ -119,4 +119,15 @@ class Course:
         for resource in latest_resources:
             resource_type = self._get_resource_type(resource)
             print(resource.find('span', class_='instancename').contents[0] + ' ---- type: ' + resource_type)
+
+    def get_resource_names(self):
+        resource_names = []
+        for section in self.sections:
+            resources = section.find_all('div', class_='activityinstance')
+            for resource in resources:
+                resource_type = self._get_resource_type(resource)
+                if resource_type == 'file' or resource_type == 'folder' or resource_type == 'assignment':
+                    resource_names.append(resource.find('span', class_='instancename').contents[0].strip())
+        return resource_names
+
 

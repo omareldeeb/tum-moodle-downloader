@@ -42,8 +42,8 @@ def get_course(session, course_name) -> Course or None:
 
         title = course.get('title', None)
         if not title:
-            print(f'did not find course: {course_name}')
-            return None
-
+            continue
         if course_name.lower() in title.lower():
             return Course(course.get('href'), session)
+    print(f"Could not find course with name matching '{course_name}'")
+    return None
