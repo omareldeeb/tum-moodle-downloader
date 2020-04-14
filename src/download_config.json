@@ -1,0 +1,12 @@
+[
+  {
+    "course_name": "Name of a course",
+    "semester": "WSXX_YY",
+    "rules": [
+      {
+        "file_pattern": ".*",
+        "destination": "./Documents/Uni/Semester/CourseName/"
+      }
+    ]
+  }
+]
