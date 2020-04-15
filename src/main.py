@@ -128,20 +128,20 @@ if __name__ == "__main__":
     # Set the function which is to be executed, if the 'list' command is provided
     list_parser.set_defaults(func=list_resources)
 
-    download_command_description = "Download 'file'(s) from a 'course' into a 'destination' path. " \
+    download_command_description = "Download resources which match a 'file_pattern' " \
+                                   "from a 'course' into a 'destination' path. " \
                                    "If parameters are omitted they are retrieved from  'src/download_config.json'"
     download_parser = subparsers.add_parser("download",
                                             description=download_command_description,
-                                            help=download_command_description,
-                                            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+                                            help=download_command_description)
     download_parser.add_argument('course',
                                  type=str,
                                  nargs='?',
                                  help="name of the course from which to download")
-    download_parser.add_argument('file',
+    download_parser.add_argument('file_pattern',
                                  type=str,
                                  nargs='?',
-                                 help="name pattern for the files which are to be downloaded")
+                                 help="name pattern for the resources which are to be downloaded")
     download_parser.add_argument('destination',
                                  type=str,
                                  nargs='?',
