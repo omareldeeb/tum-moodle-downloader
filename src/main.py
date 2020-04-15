@@ -59,7 +59,7 @@ def list_resources(args, session):
 def download(args, session):
     print(args)
     course_name = args.course
-    file_name = args.file
+    file_name = args.file_pattern
     destination_path = args.destination
 
     if destination_path is None:
