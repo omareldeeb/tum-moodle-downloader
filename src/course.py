@@ -1,6 +1,7 @@
-from bs4 import BeautifulSoup
 import os
+import urllib.parse
 
+from bs4 import BeautifulSoup
 
 class Course:
     def __init__(self, link, session):
@@ -11,16 +12,20 @@ class Course:
         self.sections = self.soup.find_all('li', class_='section main clearfix')  # All sections
         self.sections += (self.soup.find_all('li', class_='section main clearfix current'))  # Latest section
 
-    def _download_file(self, url, path):
+    def _download_file(self, url, destination_dir):
         print('Downloading file...')
         file = self.session.get(url)
-        filename = os.path.basename(file.url)
+
+        # Decode encoded URL (for more info see: https://www.urldecoder.io/python/)
+        decoded_file_url = urllib.parse.unquote(file.url)
+        filename = os.path.basename(decoded_file_url)
         if '?forcedownload=1' in filename:
             filename = filename.replace('?forcedownload=1', '')  # Removes 'forcedownload=1' parameter from the url
-        path = os.path.join(path, filename)
-        with open(path, 'wb') as f:
+
+        destination_path = os.path.join(destination_dir, filename)
+        with open(destination_path, 'wb') as f:
             f.write(file.content)
-        print('Done. Saved to: ' + path)
+        print('Done. Saved to: ' + destination_path)
 
     def _download_folder(self, url, path):
         print('Downloading folder...')
