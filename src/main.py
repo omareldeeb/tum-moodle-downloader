@@ -59,18 +59,21 @@ def list_resources(args, session):
 def download(args, session):
     print(args)
     course_name = args.course
-    file_name = args.file_pattern
+    resource_pattern = args.file_pattern
     destination_path = args.destination
 
     if destination_path is None:
-        if file_name is None:
-            file_name = ".*"
+        if resource_pattern is None:
+            resource_pattern = ".*"
         if course_name is None:
             course_name = ".*"
-        download_via_config(session, course_name, file_name)
+        download_via_config(session, course_name, resource_pattern)
     else:
         course = course_retrieval.get_course(session, course_name)
-        course.download_resource(file_name, destination_path)
+
+        resource_names = course.get_matching_resource_names(resource_pattern)
+        for resource_name in resource_names:
+            course.download_resource(resource_name, destination_path)
 
 
 def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
@@ -95,15 +98,16 @@ def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
         if course is None:
             continue
 
-        resource_names = course.get_resource_names()
+        resource_names = course.get_matching_resource_names()
         for resource_name in resource_names:
             if not re.match(req_file_pattern, resource_name):
                 continue
             for rule in rules:
                 file_pattern = re.compile(rule.get('file_pattern', None))
                 destination = rule.get('destination', None)
+                update_handling = rule.get('update_handling', None)
                 if re.match(file_pattern, resource_name):
-                    course.download_resource(resource_name, destination)
+                    course.download_resource(resource_name, destination, update_handling)
                     break
     print("Done downloading via download config.")
 

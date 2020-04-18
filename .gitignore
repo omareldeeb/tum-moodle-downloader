@@ -1,3 +1,4 @@
 *.json
 .idea
+*.pdf
 __pycache__
