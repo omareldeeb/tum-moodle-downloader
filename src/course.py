@@ -83,8 +83,8 @@ class Course:
 
     def download_resource(self, req_name, path, update_handling):
         """
-        Downloads all course resources matching the given name to the given path.
-        Currently supports files, folders and assignments.
+            Downloads all course resources with the requested name (req_name) to the given path.
+            Currently supports files, folders and assignments.
         """
         if not os.path.exists(path):
             print(path + ' not found. Creating path: ' + path)

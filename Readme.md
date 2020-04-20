@@ -23,7 +23,7 @@ your configuration in `src/download_config.json`
 (see the section below for more information on the configuration)
 * run  
 `$ python3 src/main.py download course`  
-to download resources from the specified Moodle Course based on 
+to download resources from the specified Moodle course based on 
 your configuration in `src/download_config.json`
 * run  
 `$ python3 src/main.py download course file_pattern destination`  
@@ -48,13 +48,14 @@ for help concerning the `download` command
     _You may also manually add your password to the `config.json`, 
     if you don't want to type it every time you run the script.
     This is discouraged though as your password will be stored in **plain text**!_
-    * Use `python` instead of `python3` on Windows.
+    * Use `python` or `py` instead of `python3` on Windows.
 
 Configuration
 ---
 You can configure from which courses which files should be downloaded and
-where they should be stored by editing the file `download_config.json` in the `src` directory. 
-How this works shall be explained via the following example:
+where they should be stored by editing the file `download_config.json` in the `src` directory. Additionally you can
+specify what should happen, if the file which is to be downloaded already exists at the specified destination path.
+How the configuration works shall be explained via the following example:
 * Example contents of `download_config.json`:
 ```json
 [
@@ -64,11 +65,13 @@ How this works shall be explained via the following example:
     "rules": [
       {
         "file_pattern": "Hausaufgabe.*",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\Analysis\\Hausaufgaben"
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\Analysis\\Hausaufgaben",
+        "update_handling": "replace"
       },
       {
         "file_pattern": ".*E-Test.*",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\Analysis\\E-Tests"
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\Analysis\\E-Tests",
+        "update_handling": "skip"
       }
     ]
   },
@@ -78,7 +81,8 @@ How this works shall be explained via the following example:
     "rules": [
       {
         "file_pattern": "(Übungsblatt.*|Musterlösung Blatt.*)",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\NumProg\\Übungen\\"
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\NumProg\\Übungen\\",
+        "update_handling": "add"
       }
     ]
   }
@@ -87,14 +91,25 @@ How this works shall be explained via the following example:
 * Upon running `$ python3 src/main.py download` the program goes through the configuration objects for the different
 courses one by one. For each course all available resources are checked against the rules specified for the course. 
 If a resource name matches a pattern specified in one of the rules, the resource is downloaded to the destination path
-defined by that rule (no other rules are applied to that resource afterwards). 
+defined by that rule (no other rules are applied to that resource afterwards). If the resource already exists locally, 
+the specified `update_handling` is applied.
 * In the example at hand all resources of the course "Analysis für Informatik [MA0902]" of which the name starts with 
 "Hausaufgabe" are downloaded to the folder "C:\Users\yourusername\Documents\Uni\Analysis\Hausaufgaben". 
+If the respective file already exists, it is replaced in this case.
 Resources of which the name contains "E-Test" will be downloaded the destination defined by the respective rule.
+In this case the download is skipped, if the file already exists.
 Resources of the course "Numerisches Programmieren (IN0019)" which either start with "Übungsblatt" 
 or with "Musterlösung Blatt" will be downloaded to "C:\Users\yourusername\Documents\Uni\NumProg\Übungen".
+Here a new version of the file is added (e.g. Übungsblatt 12 (1).pdf), if the file
+already exists at the specified destination.
 * Important: resources from courses which are not listed in the configuration file or resources for which none of the
 rules apply are not downloaded.
+* Options for the `update_handling` are:
+    * "skip" --> the download is skipped, if the file already exists locally
+    * "replace" --> existing local files are simply overridden by the download 
+    * "add" --> a new version in the form "filename (versionnumber).extension" is added to the specified `destination`,
+    if the file already exists locally
+    * If nothing is specified for the `update_handling`, existing local files are overridden
 * Note:
     * Running `$ python3 src/main.py download "Analysis für Informatik"` downloads only the resources for the course
     "Analyis für Informatik" based on the configuration file.
@@ -119,6 +134,6 @@ will search for `Hausaufgabe 10` and find the assignment "Hausaufgabe 10 und Pr�
 The script will then navigate to the assignment's page and download the associated file: "Blatt10.pdf", which
 will then be saved in the specified path `~/Documents/Uni/WS19/Analysis/Hausaufgaben`.
 
-* `$ python3 src/main.py downlaod "Analysis für Informatik" "Hausaufgabe" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
+* `$ python3 src/main.py downlaod "Analysis für Informatik" "Hausaufgabe.*" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
 similar to above, however, finds multiple files that start with `Hausaufgabe` and downloads
 them **all**.
