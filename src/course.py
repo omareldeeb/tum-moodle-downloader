@@ -15,32 +15,50 @@ class Course:
         self.sections += (self.soup.find_all('li', class_='section main clearfix current'))  # Latest section
 
     def _download_file(self, url, destination_dir, update_handling):
-        print('Downloading file...')
-        file = self.session.get(url)
+        # Extract header information of the file before actually downloading it
+        # Redirects MUST be enabled otherwise this won't work for files which are to be downloaded directly from the
+        # course's home page (--> example: redirect from https://www.moodle.tum.de/mod/resource/view.php?id=831037
+        # to https://www.moodle.tum.de/pluginfile.php/1702929/mod_resource/content/1/%C3%9Cbung%202_L%C3%B6sung.pdf)
+        file_head = self.session.head(url, allow_redirects=True)
+        
+        # Use 'file_head.headers' to access the files headers. Interesting headers include:
+        # - 'Last-Modified' (Date and time when the file on Moodle was modified the last time)
+        # --> TODO: only replace local file, if the file on Moodle is newer than the local one
+        # - 'Content-Length'
+        # --> TODO: consider warning the user before downloading a huge file
+        # - 'Content-Type'
 
-        # Decode encoded URL (for more info see: https://www.urldecoder.io/python/)
-        decoded_file_url = urllib.parse.unquote(file.url)
+        file_url = file_head.url
+
+        # Decode encoded URL (for more info see: https://www.urldecoder.io/python/) to get rid of "percent encoding"
+        # (as in https://www.moodle.tum.de/pluginfile.php/1702929/mod_resource/content/1/%C3%9Cbung%202_L%C3%B6sung.pdf)
+        decoded_file_url = urllib.parse.unquote(file_url)
         filename = os.path.basename(decoded_file_url)
         if '?forcedownload=1' in filename:
             filename = filename.replace('?forcedownload=1', '')  # Removes 'forcedownload=1' parameter from the url
 
         destination_path = os.path.join(destination_dir, filename)
 
+        # Apply update handling in case the file alredy exists
         file_exists = os.path.exists(destination_path)
         if file_exists and update_handling != "replace":
             if update_handling == "skip":
-                print(f"Skipping file {destination_path} because it already exists.")
+                print(f"Skipping file {filename} because it already exists at {destination_path}")
                 return
             if update_handling == "add":
-                # Create filename "file (n)" and add it as a new version of the file
+                # Create filename "filename (i).extension" and add it as a new version of the file
                 i = 1
-                # TODO How to get the most current one?
                 (root, ext) = os.path.splitext(filename)
                 while file_exists:
                     destination_path = os.path.join(destination_dir, root + ' (' + str(i) + ')' + ext)
                     i += 1
                     file_exists = os.path.exists(destination_path)
 
+        print(f'Downloading file {filename} ...')
+        file = self.session.get(url)
+        print('Done downloading.')
+
+        print(f'Saving file {filename} ...')
         with open(destination_path, 'wb') as f:
             f.write(file.content)
         print('Done. Saved to: ' + destination_path)
@@ -50,7 +68,7 @@ class Course:
         soup = BeautifulSoup(self.session.get(url).content, 'html.parser')  # Get folder page
         dir_name = soup.find('div', role='main').find('h2').contents[0]  # Find folder title
         path = os.path.join(destination_path, dir_name)
-        if not os.path.exist(path):
+        if not os.path.exists(path):
             print('Creating directory: ' + dir_name)  # Create the directory
             os.mkdir(path)
         files = soup.find_all('span', class_='fp-filename')  # Finds all files in folder page
