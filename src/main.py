@@ -73,7 +73,7 @@ def download(args, session):
 
         resource_names = course.get_matching_resource_names(resource_pattern)
         for resource_name in resource_names:
-            course.download_resource(resource_name, destination_path)
+            course.download_resource(resource_name, destination_path, update_handling="replace")
 
 
 def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
@@ -105,7 +105,7 @@ def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
             for rule in rules:
                 file_pattern = re.compile(rule.get('file_pattern', None))
                 destination = rule.get('destination', None)
-                update_handling = rule.get('update_handling', None)
+                update_handling = rule.get('update_handling', "replace")
                 if re.match(file_pattern, resource_name):
                     course.download_resource(resource_name, destination, update_handling)
                     break
