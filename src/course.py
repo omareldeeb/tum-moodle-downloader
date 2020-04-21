@@ -10,9 +10,15 @@ class Course:
         self.link = link
         self.session = session
         self.course_page = self.session.get(self.link).content
-        self.soup = BeautifulSoup(self.course_page, 'html.parser').find('ul', class_='weeks')
-        self.sections = self.soup.find_all('li', class_='section main clearfix')  # All sections
-        self.sections += (self.soup.find_all('li', class_='section main clearfix current'))  # Latest section
+        self.soup = BeautifulSoup(self.course_page, 'html.parser')
+        weeks = self.soup.find('ul', class_='weeks')
+        self.sections = []
+        if weeks is not None:
+            self.sections += weeks.find_all('li', class_='section main clearfix')  # All week secation
+            self.sections += (weeks.find_all('li', class_='section main clearfix current'))  # Latest week section
+        topics = self.soup.find('ul', class_='topics')
+        if topics is not None:
+            self.sections += topics.find_all('li', class_='section main clearfix')  # All topic sections
 
     def _download_file(self, url, destination_dir, update_handling):
         # Extract header information of the file before actually downloading it
@@ -20,7 +26,7 @@ class Course:
         # course's home page (--> example: redirect from https://www.moodle.tum.de/mod/resource/view.php?id=831037
         # to https://www.moodle.tum.de/pluginfile.php/1702929/mod_resource/content/1/%C3%9Cbung%202_L%C3%B6sung.pdf)
         file_head = self.session.head(url, allow_redirects=True)
-        
+
         # Use 'file_head.headers' to access the files headers. Interesting headers include:
         # - 'Last-Modified' (Date and time when the file on Moodle was modified the last time)
         # --> TODO: only replace local file, if the file on Moodle is newer than the local one
@@ -65,13 +71,13 @@ class Course:
 
     def _download_folder(self, url, destination_path, update_handling):
         print('Downloading folder...')
-        soup = BeautifulSoup(self.session.get(url).content, 'html.parser')  # Get folder page
-        dir_name = soup.find('div', role='main').find('h2').contents[0]  # Find folder title
+        folder_soup = BeautifulSoup(self.session.get(url).content, 'html.parser')  # Get folder page
+        dir_name = folder_soup.find('div', role='main').find('h2').contents[0]  # Find folder title
         path = os.path.join(destination_path, dir_name)
         if not os.path.exists(path):
             print('Creating directory: ' + dir_name)  # Create the directory
             os.mkdir(path)
-        files = soup.find_all('span', class_='fp-filename')  # Finds all files in folder page
+        files = folder_soup.find_all('span', class_='fp-filename')  # Finds all files in folder page
         for file in files:
             if len(file.contents) < 1:
                 continue
@@ -80,8 +86,8 @@ class Course:
 
     def _download_assignment(self, url, destination_path, update_handling):
         print('Extracting file from assignment...')
-        soup = BeautifulSoup(self.session.get(url).content, 'html.parser')
-        file = soup.find('div', class_='fileuploadsubmission').find('a')
+        assignment_soup = BeautifulSoup(self.session.get(url).content, 'html.parser')   # Get assignment page
+        file = assignment_soup.find('div', class_='fileuploadsubmission').find('a')
         if len(file.contents) < 1:
             print('No file found')
             return

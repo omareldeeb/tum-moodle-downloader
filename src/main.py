@@ -49,7 +49,6 @@ def list_resources(args, session):
 
     course = course_retrieval.get_course(session, course_name)
     if course_name is not None and course is None:
-        print('Could not find course: ' + course_name)
         exit(1)
     else:
         course.list_all_resources()
@@ -57,7 +56,6 @@ def list_resources(args, session):
 
 
 def download(args, session):
-    print(args)
     course_name = args.course
     resource_pattern = args.file_pattern
     destination_path = args.destination
