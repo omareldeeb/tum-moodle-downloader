@@ -1,18 +1,18 @@
 import json
 import re
 
-from globals import DOWNLOAD_CONFIG_PATH
+import globals
 import course_retrieval
 
 
-def list_resources(args, session):
+def list_resources(args):
     course_name = args.course
     if course_name == "*":
         print('Listing available courses: ')
-        course_retrieval.list_courses(session)
+        course_retrieval.list_courses()
         exit(0)
 
-    course = course_retrieval.get_course(session, course_name)
+    course = course_retrieval.get_course(course_name)
     if course_name is not None and course is None:
         exit(1)
     else:
@@ -20,7 +20,7 @@ def list_resources(args, session):
         exit(0)
 
 
-def download(args, session):
+def download(args):
     course_name = args.course
     resource_pattern = args.file_pattern
     destination_path = args.destination
@@ -30,23 +30,23 @@ def download(args, session):
             resource_pattern = ".*"
         if course_name is None:
             course_name = ".*"
-        download_via_config(session, course_name, resource_pattern)
+        download_via_config(course_name, resource_pattern)
     else:
-        course = course_retrieval.get_course(session, course_name)
+        course = course_retrieval.get_course(course_name)
 
         resource_names = course.get_matching_resource_names(resource_pattern)
         for resource_name in resource_names:
             course.download_resource(resource_name, destination_path, update_handling="replace")
 
 
-def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
+def download_via_config(req_course_name=".*", req_file_pattern=".*"):
     print("Downloading via download config ...")
 
     # TODO: check if requested file course name and requested file pattern exist in the config file
     req_course_name = re.compile(req_course_name)
     req_file_pattern = re.compile(req_file_pattern)
 
-    with open(DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+    with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
         config_data = json.load(json_file)
 
     for course_config in config_data:
@@ -57,7 +57,7 @@ def download_via_config(session, req_course_name=".*", req_file_pattern=".*"):
         semester = course_config.get('semester', None)
         rules = course_config.get('rules', [])
 
-        course = course_retrieval.get_course(session, course_name)
+        course = course_retrieval.get_course(course_name)
         if course is None:
             continue
 

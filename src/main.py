@@ -1,5 +1,6 @@
 import argparse
 
+import globals
 import authentication
 import credential_handler
 import moodle_downloader
@@ -61,6 +62,8 @@ if __name__ == "__main__":
         print('Could not start Moodle session.')
         exit(1)
 
+    globals.set_global_session(session)
+
     # Call the function which is set based on the command provided in the arguments
     # (see 'setup_parser' above for details)
-    args.func(args, session)
+    args.func(args)

@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
+
+import globals
 from course import Course
 
 
-def list_courses(session):
-    response = session.get(
+def list_courses():
+    response = globals.global_session.get(
         'https://www.moodle.tum.de/my/',
         params={
             'coc-manage': '1',
@@ -21,8 +23,8 @@ def list_courses(session):
         print(title)
 
 
-def get_course(session, course_name) -> Course or None:
-    response = session.get(
+def get_course(course_name) -> Course or None:
+    response = globals.global_session.get(
         'https://www.moodle.tum.de/my/',
         params={
             'coc-manage': '1',
@@ -44,6 +46,6 @@ def get_course(session, course_name) -> Course or None:
         if not title:
             continue
         if course_name.lower() in title.lower():
-            return Course(course.get('href'), session)
+            return Course(title, course.get('href'))
     print(f"Could not find course with name matching '{course_name}'")
     return None
