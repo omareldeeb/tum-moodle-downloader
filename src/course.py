@@ -131,34 +131,40 @@ class Course:
             The specified 'update_handling' is applied, if the file already exists.
             Currently supports files, folders and assignments.
         """
-        if not os.path.exists(destination_path):
-            print(destination_path + ' not found. Creating path: ' + destination_path)
-            try:
-                # Create path (recursively)
-                os.makedirs(destination_path)
-            except FileNotFoundError:
-                print(f'Could not create path {destination_path}. Please check the path and try again.')
-                return
-        found = False
-        print(f'Searching for resource {req_name} in course {self.name} ...')
-        for resource in self.resources:
-            found_name = resource.find('span', class_='instancename').contents[0].strip()
-            if req_name == found_name:
-                resource_type = self._get_resource_type(resource)
-                if resource_type == 'file':
-                    print('Found file: ' + found_name)
-                    found = True
-                    self._download_file(resource.find('a')['href'], destination_path, update_handling)
-                elif resource_type == 'folder':
-                    print('Found folder: ' + found_name)
-                    found = True
-                    self._download_folder(resource.find('a')['href'], destination_path, update_handling)
-                elif resource_type == 'assignment':
-                    print('Found assignment: ' + found_name)
-                    found = True
-                    self._download_assignment(resource.find('a')['href'], destination_path, update_handling)
-        if not found:
-            print('No resources found matching ' + req_name)
+        try:
+            if not os.path.exists(destination_path):
+                print(destination_path + ' not found. Creating path: ' + destination_path)
+                try:
+                    # Create path (recursively)
+                    os.makedirs(destination_path)
+                except FileNotFoundError:
+                    print(f'Could not create path {destination_path}. Please check the path and try again.')
+                    return
+            found = False
+            print(f'Searching for resource {req_name} in course {self.name} ...')
+            for resource in self.resources:
+                # TODO: check, check if resource is actually available for the user
+                # (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
+                found_name = resource.find('span', class_='instancename').contents[0].strip()
+                if req_name == found_name:
+                    resource_type = self._get_resource_type(resource)
+                    if resource_type == 'file':
+                        print('Found file: ' + found_name)
+                        found = True
+                        self._download_file(resource.find('a')['href'], destination_path, update_handling)
+                    elif resource_type == 'folder':
+                        print('Found folder: ' + found_name)
+                        found = True
+                        self._download_folder(resource.find('a')['href'], destination_path, update_handling)
+                    elif resource_type == 'assignment':
+                        print('Found assignment: ' + found_name)
+                        found = True
+                        self._download_assignment(resource.find('a')['href'], destination_path, update_handling)
+            if not found:
+                print('No resources found matching ' + req_name)
+        except:
+            # TODO: add logging and log exception info (traceback to a file)
+            print(f"Could not download any resource matching {req_name} due to an internal error.")
 
     def download_latest_resources(self):
         latest_section = self.soup.find('li', class_='section main clearfix current')
@@ -172,6 +178,8 @@ class Course:
     def list_all_resources(self):
         print('Listing all available resources:\n')
         for resource in self.resources:
+            # TODO: check, check if resource is actually available for the user
+            # (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
             resource_type = self._get_resource_type(resource)
             if resource_type == 'file' or resource_type == 'folder' or resource_type == 'assignment':
                 print(resource.find('span', class_='instancename').contents[
