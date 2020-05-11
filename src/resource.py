@@ -112,7 +112,8 @@ class Resource:
     def _download_assignment(file_url, destination_path, update_handling):
         # TODO: possibly extract multiple files
         print('Extracting file from assignment...')
-        assignment_soup = BeautifulSoup(globals.global_session.get(file_url).content, 'html.parser')   # Get assignment page
+        # Get assignment page
+        assignment_soup = BeautifulSoup(globals.global_session.get(file_url).content, 'html.parser')
         file_anchor = assignment_soup.find('div', class_='fileuploadsubmission').find('a')
         if len(file_anchor.contents) < 1:
             print('No file found')
