@@ -13,11 +13,11 @@ class Course:
         course_page = globals.global_session.get(course_url).content
         self.soup = BeautifulSoup(course_page, 'html.parser')
 
-        self._extract_resources()
+        self.resources = self._extract_resources()
+        self.latest_resources = [resource for resource in self.resources.values() if resource.is_recent]
 
     def _extract_resources(self):
-        self.resources = {}
-        self.latest_resources = []
+        resources = {}
         sections = []
         latest_week_section = None
 
@@ -34,13 +34,14 @@ class Course:
         if topics is not None:
             sections += topics.find_all('li', class_='section main clearfix')  # All topic sections
 
+        # Extract resources from the sections
         for section in sections:
             section_resources = section.find_all('div', class_='activityinstance')
             for resource_div in section_resources:
-                resource = Resource(resource_div)
-                self.resources[resource.name] = resource
-                if section == latest_week_section:
-                    self.latest_resources.append(resource)
+                resource = Resource(resource_div, is_recent=(section == latest_week_section))
+                resources[resource.name] = resource
+
+        return resources
 
     def download_resource(self, resource_name, destination_dir, update_handling):
         """

@@ -7,8 +7,9 @@ import globals
 
 
 class Resource:
-    def __init__(self, resource_div):
+    def __init__(self, resource_div, is_recent):
         self.resource_div = resource_div
+        self.is_recent = is_recent
         self.name = Resource.get_resource_name(self.resource_div)
         self.resource_url = Resource.get_resource_url(self.resource_div)
         if self.resource_url is None:
