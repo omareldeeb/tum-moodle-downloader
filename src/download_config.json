@@ -1,0 +1,26 @@
+[
+  {
+    "course_name": "Name of a course",
+    "semester": "WSXX_YY",
+    "rules": [
+      {
+        "file_pattern": "Hausaufgabe.*",
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\Homework"
+      },
+      {
+        "file_pattern": ".*",
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\"
+      }
+    ]
+  },
+  {
+    "course_name": "Name of another course",
+    "semester": "SSXX",
+    "rules": [
+      {
+        "file_pattern": "(Übungsblatt.*|Musterlösung Blatt.*)",
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\SomeCourseName\\Exercises\\"
+      }
+    ]
+  }
+]
