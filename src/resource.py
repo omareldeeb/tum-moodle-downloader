@@ -40,6 +40,10 @@ class Resource:
             return 'folder'
         elif group == ['activity', 'assign', 'modtype_assign', '']:
             return 'assignment'
+        elif group == ['activity', 'url', 'modtype_url', '']:
+            # TODO what to do with other types?
+            if 'pdf' in resource_div.find('img')['src']:
+                return 'url'
         return 'other (e.g. quiz, forum, ...)'
 
     @staticmethod
@@ -134,7 +138,7 @@ class Resource:
         # TODO: check, check if resource is actually available for the user
         #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
         print(f"Attempting to download resource {self.name} with type {self.type} ...")
-        if self.type == 'file':
+        if self.type == 'file' or self.type == 'url':
             Resource._download_file(self.resource_url, destination_dir, update_handling)
         elif self.type == 'folder':
             Resource._download_folder(self.resource_url, destination_dir, update_handling)
