@@ -116,15 +116,16 @@ class Resource:
     @staticmethod
     def _download_assignment(file_url, destination_path, update_handling):
         # TODO: possibly extract multiple files
-        print('Extracting file from assignment...')
+        print('Extracting files from assignment...')
         # Get assignment page
         assignment_soup = BeautifulSoup(globals.global_session.get(file_url).content, 'html.parser')
-        file_anchor = assignment_soup.find('div', class_='fileuploadsubmission').find('a')
-        if len(file_anchor.contents) < 1:
+        file_anchors = assignment_soup.find('div', id='intro').find_all('div', class_='fileuploadsubmission')
+        if len(file_anchors) == 0:
             print('No file found')
             return
-        file_url = file_anchor['href']
-        Resource._download_file(file_url, destination_path, update_handling)
+        for file_anchor in file_anchors:
+            file_url = file_anchor.find('a')['href']
+            Resource._download_file(file_url, destination_path, update_handling)
 
     def download(self, destination_dir, update_handling):
         if not os.path.exists(destination_dir):

@@ -21,7 +21,7 @@ def get_course(course_name) -> Course or None:
         if not title:
             continue
         # TODO: consider using regex for finding a matching course
-        # TODO: handle mutltiple matching courses
+        # TODO: handle multiple matching courses
         if course_name.lower() in title.lower():
             return Course(title, course.get('href'))
     print(f"Could not find course with name matching '{course_name}'")
