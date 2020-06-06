@@ -115,7 +115,6 @@ class Resource:
 
     @staticmethod
     def _download_assignment(file_url, destination_path, update_handling):
-        # TODO: possibly extract multiple files
         print('Extracting files from assignment...')
         # Get assignment page
         assignment_soup = BeautifulSoup(globals.global_session.get(file_url).content, 'html.parser')
