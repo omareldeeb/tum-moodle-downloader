@@ -68,7 +68,18 @@ def start_session(username, password) -> requests.Session or None:
     response = session.post(
         f'{IDP_BASE_URL}{sso_url}',
         headers=additional_headers,
+        proxies=proxies,
+        verify=True,
+    )
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    csrf_token = soup.find("input").attrs['value']
+
+    response = session.post(
+        f'{IDP_BASE_URL}{sso_url}',
+        headers=additional_headers,
         data={
+            'csrf_token': csrf_token,
             'j_username': username,
             'j_password': password,
             'donotcache': '1',
