@@ -73,9 +73,9 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
                     continue
                 for rule in rules:
                     file_pattern = re.compile(rule.get('file_pattern', None))
-                    destination = rule.get('destination', None)
-                    update_handling = rule.get('update_handling', "replace")
                     if re.match(file_pattern, resource_name):
+                        destination = rule.get('destination', None)
+                        update_handling = rule.get('update_handling', "replace")
                         course.download_resource(resource_name, destination, update_handling)
                         break
         print("Done downloading via download config.")
