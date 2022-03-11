@@ -4,6 +4,14 @@ import urllib
 from bs4 import BeautifulSoup
 
 import globals
+import asyncio
+
+
+def background(f):
+    def wrapped(*args):
+        return asyncio.get_event_loop().run_in_executor(None, f, *args)
+
+    return wrapped
 
 
 class Resource:
@@ -126,6 +134,7 @@ class Resource:
             file_url = file_anchor.find('a')['href']
             Resource._download_file(file_url, destination_path, update_handling)
 
+    @background
     def download(self, destination_dir, update_handling):
         if not os.path.exists(destination_dir):
             print(destination_dir + ' not found. Creating path: ' + destination_dir)
