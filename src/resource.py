@@ -34,13 +34,13 @@ class Resource:
     @staticmethod
     def get_resource_type(resource_div):
         group = resource_div.parent.parent.parent.parent['class']
-        if group == ['activity', 'resource', 'modtype_resource', '']:
+        if group == ['activity', 'resource', 'modtype_resource']:
             return 'file'
-        elif group == ['activity', 'folder', 'modtype_folder', '']:
+        elif group == ['activity', 'folder', 'modtype_folder']:
             return 'folder'
-        elif group == ['activity', 'assign', 'modtype_assign', '']:
+        elif group == ['activity', 'assign', 'modtype_assign']:
             return 'assignment'
-        elif group == ['activity', 'url', 'modtype_url', '']:
+        elif group == ['activity', 'url', 'modtype_url']:
             # TODO what to do with other types?
             if 'pdf' in resource_div.find('img')['src']:
                 return 'url'
