@@ -24,10 +24,11 @@ def setup_parser():
                              action='store_true',
                              help="only prints available files")
     list_parser.add_argument("course",
-                                   type=str,
-                                   nargs='?',
-                                   default='*',
-                                   help="name of the course of which the resources are to be listed")
+                             type=str,
+                             nargs='?',
+                             default='*',
+                             help="name of the course of which the resources are to be listed")
+    
     # Set the function which is to be executed, if the 'list' command is provided
     list_parser.set_defaults(func=moodle_downloader.list_resources)
 
