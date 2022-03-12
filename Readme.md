@@ -123,9 +123,10 @@ rules apply are not downloaded.
 
 Examples
 ---
-* For an example which downloads resources based on the configuration file see the section above.
 * `$ python src/main.py list "Analysis f체r Informatik"` 
 will list all resources of the course `Analysis f체r Informatik` available for download.
+* `$ python src/main.py list -f "Analysis f체r Informatik"` 
+will list all **files** of the course `Analysis f체r Informatik` available for download.
 
 * `$ python src/main.py download "Analysis f체r Informatik" "Hausaufgabe 10" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"` 
 will search the user's courses for `Analysis f체r Informatik`
@@ -134,6 +135,6 @@ will search for `Hausaufgabe 10` and find the assignment "Hausaufgabe 10 und Pr�
 The script will then navigate to the assignment's page and download the associated file: "Blatt10.pdf", which
 will then be saved in the specified path `~/Documents/Uni/WS19/Analysis/Hausaufgaben`.
 
-* `$ python src/main.py downlaod "Analysis f체r Informatik" "Hausaufgabe.*" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
+* `$ python src/main.py download "Analysis f체r Informatik" "Hausaufgabe.*" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
 similar to above, however, finds multiple files that start with `Hausaufgabe` and downloads
 them **all**.

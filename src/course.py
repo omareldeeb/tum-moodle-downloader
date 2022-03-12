@@ -74,6 +74,14 @@ class Course:
             #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
             print(f"{name} ---- type: {resource.type}")
 
+    def list_all_files(self):
+        print(f'Listing all available resources for course {self.name} ...\n')
+        for name, resource in self.resources.items():
+            if resource.type == "file":
+                # TODO: check, check if resource is actually available for the user
+                #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
+                print(f"{name} ---- type: {resource.type}")
+
     def list_latest_resources(self):
         print('Listing latest resources ...\n')
         if len(self.latest_resources) == 0:
