@@ -5,6 +5,7 @@ from pathlib import Path
 BASE_PATH = Path(__file__).parent
 CREDENTIALS_PATH = (BASE_PATH / "./credentials.json").resolve()
 DOWNLOAD_CONFIG_PATH = (BASE_PATH / "./download_config.json").resolve()
+CONFIG_PATH = (BASE_PATH / "./main_config.json").resolve()
 
 global_session = None
 

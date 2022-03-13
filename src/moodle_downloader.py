@@ -1,6 +1,5 @@
 import json
 import re
-import logging
 
 import globals
 import course_retrieval

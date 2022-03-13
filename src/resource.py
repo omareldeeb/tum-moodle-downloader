@@ -135,6 +135,9 @@ class Resource:
             Resource._download_file(file_url, destination_path, update_handling)
 
     @background
+    def download_parallel(self, destination_dir, update_handling):
+        Resource.download(self, destination_dir, update_handling)
+
     def download(self, destination_dir, update_handling):
         if not os.path.exists(destination_dir):
             print(destination_dir + ' not found. Creating path: ' + destination_dir)
