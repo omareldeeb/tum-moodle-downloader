@@ -1,4 +1,5 @@
 import argparse
+import json
 
 import globals
 import authentication
@@ -51,6 +52,12 @@ def setup_parser():
 if __name__ == "__main__":
     setup_parser()
     args = arg_parser.parse_args()
+
+    with open(globals.CONFIG_PATH, mode='r', encoding='utf-8') as main_config:
+        config_data = json.load(main_config)
+        parallel = config_data[0].get('parallel_downloads', bool)
+        if parallel:
+            print("\u001B[31mParallel downloads active! This leads to unsorted download logging\u001B[0m")
 
     username, password = credential_handler.get_credentials()
 
