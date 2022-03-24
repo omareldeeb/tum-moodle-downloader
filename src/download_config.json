@@ -5,11 +5,13 @@
     "rules": [
       {
         "file_pattern": "Hausaufgabe.*",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\Homework"
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\Homework",
+        "update_handling": "update"
       },
       {
         "file_pattern": ".*",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\"
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\",
+        "update_handling": "update"
       }
     ]
   },
@@ -19,7 +21,8 @@
     "rules": [
       {
         "file_pattern": "(Übungsblatt.*|Musterlösung Blatt.*)",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\SomeCourseName\\Exercises\\"
+        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\SomeCourseName\\Exercises\\",
+        "update_handling": "update"
       }
     ]
   }

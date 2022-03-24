@@ -1,5 +1,8 @@
 import os
 import urllib
+import datetime
+
+from dateutil.parser import parse as parsedate
 
 from bs4 import BeautifulSoup
 
@@ -55,8 +58,6 @@ class Resource:
         file_head = globals.global_session.head(url, allow_redirects=True)
 
         # Use 'file_head.headers' to access the files headers. Interesting headers include:
-        # - 'Last-Modified' (Date and time when the file on Moodle was modified the last time)
-        # --> TODO: only replace local file, if the file on Moodle is newer than the local one
         # - 'Content-Length'
         # --> TODO: consider asking for the user's consent before downloading a huge file
         # - 'Content-Type'
@@ -87,6 +88,13 @@ class Resource:
                     destination_path = os.path.join(destination_dir, root + ' (' + str(i) + ')' + ext)
                     i += 1
                     file_exists = os.path.exists(destination_path)
+            if update_handling == "update":
+                url_time = file_head.headers['last-modified']
+                url_date = parsedate(url_time).astimezone()
+                file_time = datetime.datetime.fromtimestamp(os.path.getmtime(destination_path)).astimezone()
+                if url_date <= file_time:
+                    print(f"Skipping file {filename} because it is already the latest version")
+                    return
 
         print(f'Downloading file {filename} ...')
         file = globals.global_session.get(url)

@@ -16,7 +16,10 @@ def list_resources(args):
             # List all available resources within the specified course
             course = course_retrieval.get_course(course_name)
             if course is not None:
-                course.list_all_resources()
+                if args.files:
+                    course.list_all_files()
+                else:
+                    course.list_all_resources()
     except:
         # TODO: add logging and log exception info (traceback) to a file
         print("Could not list resources due to an internal error.")
