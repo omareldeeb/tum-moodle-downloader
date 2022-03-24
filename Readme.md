@@ -20,45 +20,56 @@ Setup
 
 Quick Start
 ---
+* `$ python3 src/main.py download`  
+to download resources from Moodle based on 
+your configuration in `src/course_config.json` 
+(see the section below for more information on the configuration)
 
-* run  
-  `$ python src/main.py download`  
-  to download resources from Moodle based on your configuration in `src/download_config.json`
-  (see the section below for more information on the configuration)
-* run  
-  `$ python src/main.py download <course>`  
-  to download resources from the specified Moodle course based on your configuration in `src/download_config.json`
-* run  
-  `$ python src/main.py download <course> <file_pattern> <destination>`  
-  to download resources which match the `file_pattern` from `course` to a `destination` path
-* run  
-  `$ python src/main.py list <course>`
-  to list available resources of the specified `course` or, if no course is specified, list available courses for your
-  Moodle account
-* run  
-  `$ python src/main.py -h`  
-  for general help on how to use the program
-* run  
-  `$ python src/main.py list -h`  
-  for help concerning the `list` command
-* run  
-  `$ python src/main.py download -h`  
-  for help concerning the `download` command
+
+* `$ python3 src/main.py download course`  
+to download resources from the specified Moodle course based on 
+your configuration in `src/course_config.json`
+
+
+* `$ python3 src/main.py download course file_pattern destination`  
+to
+download resources which match the `file_pattern` from `course` to a `destination` path
+
+
+* `$ python3 src/main.py list [course]`
+to list available resources of the specified `course` or, if no course is specified, list available courses for your
+Moodle account
+
+
+* `$ python3 src/main.py -h`  
+for general help on how to use the program
+
+
+* `$ python3 src/main.py list -h`  
+for help concerning the `list` command
+
+
+* `$ python3 src/main.py download -h`  
+for help concerning the `download` command
+
+
 * Note:
-    * Upon running one of the commands you will be prompted to enter your Moodle credentials. The username will be
-      stored in a `config.json` in the `src` directory.
-      _You may also manually add your password to the `config.json`, if you don't want to type it every time you run the
-      script. This is discouraged though as your password will be stored in **plain text**!_
+    * Upon running one of the commands you will be prompted to enter your Moodle credentials.
+    The username will be stored in a `credentials.json` in the `src` directory.
+    _You may also manually add your password to the `credentials.json`, 
+    if you don't want to type it every time you run the script.
+    This is discouraged though as your password will be stored in **plain text**!_
+    * Use `python` or `py` instead of `python3` on Windows.
 
 Configuration
 ---
-You can configure from which courses which files should be downloaded and where they should be stored by editing the
-file `download_config.json` in the `src` directory. Additionally you can specify what should happen, if the file which
-is to be downloaded already exists at the specified destination path. How the configuration works shall be explained via
-the following example:
+You can configure from which courses which files should be downloaded and
+where they should be stored by editing the file `course_config.json` in the `src` directory. Additionally, you can
+specify what should happen, if the file which is to be downloaded already exists at the specified destination path.
+The download configuration is specified in `download_config.json`, which is located in the same `src` directory.
 
-* Example contents of `download_config.json`:
-
+How the configuration works shall be explained via the following example:
+* Example contents of `course_config.json`:
 ```json
 [
   {
@@ -122,6 +133,18 @@ the following example:
     * The course name only needs to be a substring of the full course name. If multiple of your Moodle courses match the
       specified course name, currently only the first one that is found will be taken into account.
     * Currently the value specified for the semester is not used.
+
+
+* Example contents of `download_config.json`:
+```json
+[
+  {
+    "parallel_downloads": true
+  }
+]
+```
+As stated in the debug message `parallel_downloads` makes the logging less readable, but greatly improves execution time.
+
 
 Examples
 ---

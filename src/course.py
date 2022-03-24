@@ -1,3 +1,4 @@
+import json
 import re
 
 from bs4 import BeautifulSoup
@@ -55,7 +56,12 @@ class Course:
             if resource is None:
                 print(f'No resource matching {resource_name} found')
             else:
-                resource.download(destination_dir, update_handling)
+                with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+                    config_data = json.load(json_file)[0]
+                if config_data['parallel_downloads']:
+                    resource.download_parallel(destination_dir, update_handling)
+                else:
+                    resource.download(destination_dir, update_handling)
         except:
             # TODO: add logging and log exception info (traceback to a file)
             print(f"Could not download any resource matching {resource_name} due to an internal error.")
@@ -64,8 +70,14 @@ class Course:
         print(f'Downloading latest resources for course {self.name} ...\n')
         if len(self.latest_resources) == 0:
             print('No resources categorized as "latest" found.')
+        with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+            config_data = json.load(json_file)
+            parallel = config_data.get('course_name', bool)
         for resource in self.latest_resources:
-            resource.download(destination_dir, update_handling)
+            if parallel:
+                resource.download_parallel(destination_dir, update_handling)
+            else:
+                resource.download(destination_dir, update_handling)
 
     def list_all_resources(self):
         print(f'Listing all available resources for course {self.name} ...\n')

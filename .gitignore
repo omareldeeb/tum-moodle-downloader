@@ -1,4 +1,4 @@
-*.json
+credentials.json
 .idea
 *.pdf
 __pycache__

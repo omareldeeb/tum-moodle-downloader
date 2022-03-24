@@ -1,29 +1,5 @@
 [
   {
-    "course_name": "Name of a course",
-    "semester": "WSXX_YY",
-    "rules": [
-      {
-        "file_pattern": "Hausaufgabe.*",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\Homework",
-        "update_handling": "update"
-      },
-      {
-        "file_pattern": ".*",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\CourseName\\",
-        "update_handling": "update"
-      }
-    ]
-  },
-  {
-    "course_name": "Name of another course",
-    "semester": "SSXX",
-    "rules": [
-      {
-        "file_pattern": "(Übungsblatt.*|Musterlösung Blatt.*)",
-        "destination": "C:\\Users\\yourusername\\Documents\\Uni\\SomeCourseName\\Exercises\\",
-        "update_handling": "update"
-      }
-    ]
+    "parallel_downloads": true
   }
 ]

@@ -1,0 +1,13 @@
+[
+  {
+    "course_name": "Grundlagen: Datenbanken (IN0008)",
+    "semester": "WS21_22",
+    "rules": [
+      {
+        "file_pattern": "Lösung*.*",
+        "destination": "/tmp/era/tutor",
+        "update_handling": "replace"
+      }
+    ]
+  }
+]

@@ -7,6 +7,14 @@ from dateutil.parser import parse as parsedate
 from bs4 import BeautifulSoup
 
 import globals
+import asyncio
+
+
+def background(f):
+    def wrapped(*args):
+        return asyncio.get_event_loop().run_in_executor(None, f, *args)
+
+    return wrapped
 
 
 class Resource:
@@ -133,6 +141,10 @@ class Resource:
         for file_anchor in file_anchors:
             file_url = file_anchor.find('a')['href']
             Resource._download_file(file_url, destination_path, update_handling)
+
+    @background
+    def download_parallel(self, destination_dir, update_handling):
+        Resource.download(self, destination_dir, update_handling)
 
     def download(self, destination_dir, update_handling):
         if not os.path.exists(destination_dir):

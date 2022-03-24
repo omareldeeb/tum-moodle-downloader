@@ -1,6 +1,5 @@
 import json
 import re
-import logging
 
 import globals
 import course_retrieval
@@ -55,7 +54,7 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
         req_course_name = re.compile(req_course_name)
         req_file_pattern = re.compile(req_file_pattern)
 
-        with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+        with open(globals.COURSE_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
             config_data = json.load(json_file)
 
         for course_config in config_data:
@@ -76,9 +75,9 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
                     continue
                 for rule in rules:
                     file_pattern = re.compile(rule.get('file_pattern', None))
-                    destination = rule.get('destination', None)
-                    update_handling = rule.get('update_handling', "replace")
                     if re.match(file_pattern, resource_name):
+                        destination = rule.get('destination', None)
+                        update_handling = rule.get('update_handling', "replace")
                         course.download_resource(resource_name, destination, update_handling)
                         break
         print("Done downloading via download config.")
