@@ -56,7 +56,7 @@ class Course:
             if resource is None:
                 print(f'No resource matching {resource_name} found')
             else:
-                with open(globals.CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+                with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
                     config_data = json.load(json_file)[0]
                 if config_data['parallel_downloads']:
                     resource.download_parallel(destination_dir, update_handling)
@@ -70,7 +70,7 @@ class Course:
         print(f'Downloading latest resources for course {self.name} ...\n')
         if len(self.latest_resources) == 0:
             print('No resources categorized as "latest" found.')
-        with open(globals.CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+        with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
             config_data = json.load(json_file)
             parallel = config_data.get('course_name', bool)
         for resource in self.latest_resources:

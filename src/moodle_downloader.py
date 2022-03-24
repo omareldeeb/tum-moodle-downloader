@@ -51,7 +51,7 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
         req_course_name = re.compile(req_course_name)
         req_file_pattern = re.compile(req_file_pattern)
 
-        with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
+        with open(globals.COURSE_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
             config_data = json.load(json_file)
 
         for course_config in config_data:
