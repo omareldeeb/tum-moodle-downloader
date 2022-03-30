@@ -118,7 +118,7 @@ How the configuration works shall be explained via the following example:
 * Important: resources from courses which are not listed in the configuration file or resources for which none of the
   rules apply are not downloaded.
 * Options for the `update_handling` are:
-    * `"update"` --> if the online recourse has a newer modification date than the local copy the local version gets updated. Otherwise, the download is skipped.
+    * `"update"` --> if the online resource has a newer modification date than the local copy, the local version gets updated. Otherwise, the download is skipped.
     * `"skip"` --> the download is skipped, if the file already exists locally
     * `"replace"` --> existing local files are simply overridden by the download
     * `"add"` --> a new version in the form "filename (versionnumber).extension" is added to the
