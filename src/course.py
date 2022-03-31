@@ -44,21 +44,19 @@ class Course:
 
         return resources
 
-    def download_resource(self, resource_name, destination_dir, update_handling):
+    def download_resource(self, resource_name, destination_dir, parallel, update_handling):
         """
             Downloads the course resource with the requested name 'resource_name' to the path 'destination_dir'.
             The specified 'update_handling' is applied, if the file already exists.
             Currently supports files, folders and assignments.
         """
         try:
-            print(f'Searching for resource {resource_name} in course {self.name} ...')
+            print(f'Searching for resource {resource_name} in course \"{self.name}\"')
             resource = self.resources.get(resource_name, None)
             if resource is None:
                 print(f'No resource matching {resource_name} found')
             else:
-                with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
-                    config_data = json.load(json_file)[0]
-                if config_data['parallel_downloads']:
+                if parallel:
                     resource.download_parallel(destination_dir, update_handling)
                 else:
                     resource.download(destination_dir, update_handling)

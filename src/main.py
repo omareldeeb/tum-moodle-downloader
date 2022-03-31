@@ -61,9 +61,6 @@ if __name__ == "__main__":
 
     with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as main_config:
         config_data = json.load(main_config)
-        parallel = config_data[0].get('parallel_downloads', bool)
-        if parallel:
-            print("\u001B[31mParallel downloads active! This leads to unsorted download logging\u001B[0m")
 
     username, password = credential_handler.get_credentials()
 

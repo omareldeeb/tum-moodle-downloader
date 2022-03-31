@@ -38,10 +38,16 @@ def download(args):
             download_via_config(course_name, resource_pattern)
         else:
             course = course_retrieval.get_course(course_name)
-
             resource_names = course.get_matching_resource_names(resource_pattern)
+
+            parallel = False
+            with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as download_config_file:
+                config_data = json.load(download_config_file)[0]
+                parallel = config_data.get('parallel_downloads', bool)
+                if parallel:
+                    print("\u001B[31mParallel downloads active! This leads to unsorted download logging\u001B[0m")
             for resource_name in resource_names:
-                course.download_resource(resource_name, destination_path, update_handling="replace")
+                course.download_resource(resource_name, destination_path, parallel, update_handling="update")
     except:
         # TODO: add logging and log exception info (traceback) to a file
         print("Could not download resources due to an internal error.")
@@ -54,15 +60,20 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
         req_course_name = re.compile(req_course_name)
         req_file_pattern = re.compile(req_file_pattern)
 
-        with open(globals.COURSE_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
-            config_data = json.load(json_file)
+        with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as download_config_file:
+            download_config_data = json.load(download_config_file)[0]
+            parallel = download_config_data.get('parallel_downloads', bool)
+            if parallel:
+                print("\u001B[31mParallel downloads active! This leads to unsorted download logging\u001B[0m")
+        with open(globals.COURSE_CONFIG_PATH, mode='r', encoding='utf-8') as course_config_file:
+            course_config_data = json.load(course_config_file)
 
-        for course_config in config_data:
+        for course_config in course_config_data:
             course_name = course_config.get('course_name', None)
             if not re.match(req_course_name, course_name):
                 continue
 
-            semester = course_config.get('semester', None)
+            # semester = course_config.get('semester', None)
             rules = course_config.get('rules', [])
 
             course = course_retrieval.get_course(course_name)
@@ -78,7 +89,7 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
                     if re.match(file_pattern, resource_name):
                         destination = rule.get('destination', None)
                         update_handling = rule.get('update_handling', "replace")
-                        course.download_resource(resource_name, destination, update_handling)
+                        course.download_resource(resource_name, destination, parallel, update_handling)
                         break
         print("Done downloading via download config.")
     except:
