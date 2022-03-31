@@ -86,7 +86,7 @@ class Resource:
         file_exists = os.path.exists(destination_path)
         if file_exists and update_handling != "replace":
             if update_handling == "skip":
-                print(f"Skipping file {filename} because it already exists at {destination_path}")
+                print(f"Skipping file \u001B[35m{filename}\u001B[0m because it already exists at {destination_path}")
                 return
             if update_handling == "add":
                 # Create filename "filename (i).extension" and add it as a new version of the file
@@ -101,21 +101,21 @@ class Resource:
                 url_date = parsedate(url_time).astimezone()
                 file_time = datetime.datetime.fromtimestamp(os.path.getmtime(destination_path)).astimezone()
                 if url_date <= file_time:
-                    print(f"Skipping file {filename} because it is already the latest version")
+                    print(f"Skipping file \u001B[35m{filename}\u001B[0m because it is already the latest version")
                     return
 
-        print(f'Downloading file {filename} ...')
+        print(f'Downloading file \u001B[35m{filename}\u001B[0m')
         file = globals.global_session.get(url)
         print('Done downloading.')
 
-        print(f'Saving file {filename} ...')
+        print(f'Saving file \u001B[35m{filename}\u001B[0m')
         with open(destination_path, 'wb') as f:
             f.write(file.content)
         print('Done. Saved to: ' + destination_path)
 
     @staticmethod
     def _download_folder(file_url, destination_path, update_handling):
-        print('Downloading folder...')
+        print('Downloading folder')
         folder_soup = BeautifulSoup(globals.global_session.get(file_url).content, 'html.parser')  # Get folder page
         dir_name = folder_soup.find('div', role='main').find('h2').contents[0]  # Find folder title
         folder_path = os.path.join(destination_path, dir_name)
@@ -131,7 +131,7 @@ class Resource:
 
     @staticmethod
     def _download_assignment(file_url, destination_path, update_handling):
-        print('Extracting files from assignment...')
+        print('Extracting files from assignment')
         # Get assignment page
         assignment_soup = BeautifulSoup(globals.global_session.get(file_url).content, 'html.parser')
         file_anchors = assignment_soup.find('div', id='intro').find_all('div', class_='fileuploadsubmission')
@@ -157,7 +157,8 @@ class Resource:
                 return
         # TODO: check, check if resource is actually available for the user
         #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-        print(f"Attempting to download resource {self.name} with type {self.type} ...")
+        print(f"Attempting to download resource \u001B[35m{self.name}\u001B[0m with type \u001B[34;1m{self.type}" +
+              "\u001B[0m")
         if self.type == 'file' or self.type == 'url':
             Resource._download_file(self.resource_url, destination_dir, update_handling)
         elif self.type == 'folder':
@@ -165,4 +166,5 @@ class Resource:
         elif self.type == 'assignment':
             Resource._download_assignment(self.resource_url, destination_dir, update_handling)
         else:
-            print(f"Cannot download resource '{self.name}': type '{self.type}' is not supported!")
+            print(f"Cannot download resource \u001B[35m{self.name}\u001B[0m of type \u001B[34;1m{self.type}\u001B[0m" +
+                  f" is not supported!")

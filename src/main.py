@@ -14,7 +14,7 @@ def setup_parser():
     # Add subparsers for the different available commands
     subparsers = arg_parser.add_subparsers()
 
-    list_command_description = "List available resources of the specified 'course' " \
+    list_command_description = "List available resources of the specified \"course\" " \
                                "or, if no course is specified, list available courses"
     list_parser = subparsers.add_parser("list",
                                         description=list_command_description,
@@ -33,9 +33,9 @@ def setup_parser():
     # Set the function which is to be executed, if the 'list' command is provided
     list_parser.set_defaults(func=moodle_downloader.list_resources)
 
-    download_command_description = "Download resources which match a 'file_pattern' " \
-                                   "from a 'course' into a 'destination' path. " \
-                                   "If parameters are omitted they are retrieved from  'src/course_config.json'"
+    download_command_description = "Download resources which match a \"file_pattern\" " \
+                                   "from a \"course\" into a \"destination\" path. " \
+                                   "If parameters are omitted they are retrieved from  \"src/course_config.json\""
     download_parser = subparsers.add_parser("download",
                                             description=download_command_description,
                                             help=download_command_description)

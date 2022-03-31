@@ -45,7 +45,7 @@ def download(args):
                 config_data = json.load(download_config_file)[0]
                 parallel = config_data.get('parallel_downloads', bool)
                 if parallel:
-                    print("\u001B[31mParallel downloads active! This leads to unsorted download logging\u001B[0m")
+                    print("\u001B[33mParallel downloads active! This leads to unsorted download logging\u001B[0m")
             for resource_name in resource_names:
                 course.download_resource(resource_name, destination_path, parallel, update_handling="update")
     except:
@@ -54,7 +54,7 @@ def download(args):
 
 
 def download_via_config(req_course_name=".*", req_file_pattern=".*"):
-    print("Downloading via download config ...")
+    print("Downloading via download config")
     try:
         # TODO: check if requested file course name and requested file pattern exist in the config file
         req_course_name = re.compile(req_course_name)
@@ -64,7 +64,7 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
             download_config_data = json.load(download_config_file)[0]
             parallel = download_config_data.get('parallel_downloads', bool)
             if parallel:
-                print("\u001B[31mParallel downloads active! This leads to unsorted download logging\u001B[0m")
+                print("\u001B[33mParallel downloads active! This leads to unsorted download logging\u001B[0m")
         with open(globals.COURSE_CONFIG_PATH, mode='r', encoding='utf-8') as course_config_file:
             course_config_data = json.load(course_config_file)
 

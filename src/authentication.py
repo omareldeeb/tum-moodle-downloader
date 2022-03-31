@@ -35,7 +35,7 @@ def _find_sso_data(soup) -> (str, dict) or None:
 
 
 def start_session(username, password) -> requests.Session or None:
-    print('Starting Moodle session...')
+    print('Starting Moodle session')
     session = requests.Session()
     session.headers.update(base_headers)
 

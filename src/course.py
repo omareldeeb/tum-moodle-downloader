@@ -51,10 +51,11 @@ class Course:
             Currently supports files, folders and assignments.
         """
         try:
-            print(f'Searching for resource {resource_name} in course \"{self.name}\"')
+            print('Searching for resource ' + f'\u001B[35m{resource_name}\u001B[0m' + ' in course ' +
+                  f'\u001B[36m{self.name}\u001B[0m')
             resource = self.resources.get(resource_name, None)
             if resource is None:
-                print(f'No resource matching {resource_name} found')
+                print(f'No resource matching \u001B[35m{resource_name}\u001B[0m found')
             else:
                 if parallel:
                     resource.download_parallel(destination_dir, update_handling)
@@ -62,10 +63,11 @@ class Course:
                     resource.download(destination_dir, update_handling)
         except:
             # TODO: add logging and log exception info (traceback to a file)
-            print(f"Could not download any resource matching {resource_name} due to an internal error.")
+            print(f"Could not download any resource matching \u001B[35m{resource_name}\u001B[0m" +
+                  f" due to an internal error.")
 
     def download_latest_resources(self, destination_dir, update_handling):
-        print(f'Downloading latest resources for course {self.name} ...\n')
+        print(f'Downloading latest resources for course \u001B[36m{self.name}\u001B[0m')
         if len(self.latest_resources) == 0:
             print('No resources categorized as "latest" found.')
         with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as json_file:
@@ -78,26 +80,26 @@ class Course:
                 resource.download(destination_dir, update_handling)
 
     def list_all_resources(self):
-        print(f'Listing all available resources for course {self.name} ...\n')
+        print(f'Listing all available resources for course \u001B[36m{self.name}\u001B[0m')
         for name, resource in self.resources.items():
             # TODO: check, check if resource is actually available for the user
             #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-            print(f"{name} ---- type: {resource.type}")
+            print(f"{name} --- type: {resource.type}")
 
     def list_all_files(self):
-        print(f'Listing all available resources for course {self.name} ...\n')
+        print(f'Listing all available resources for course \u001B[36m{self.name}\u001B[0m')
         for name, resource in self.resources.items():
             if resource.type == "file":
                 # TODO: check, check if resource is actually available for the user
                 #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-                print(f"{name} ---- type: {resource.type}")
+                print(f"{name} --- type: {resource.type}")
 
     def list_latest_resources(self):
-        print('Listing latest resources ...\n')
+        print('Listing latest resources')
         if len(self.latest_resources) == 0:
             print('No resources categorized as "latest" found.')
         for resource in self.latest_resources:
-            print(f"{resource.name} ---- type: {resource.type}")
+            print(f"{resource.name} --- type: {resource.type}")
 
     def get_matching_resource_names(self, resource_pattern=".*"):
         resource_pattern = re.compile(resource_pattern)
