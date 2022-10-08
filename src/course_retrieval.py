@@ -10,7 +10,7 @@ def list_courses():
         course = course_div.find('h3').find('a')
 
         title = course.get('title', None)
-        print(title)
+        print(f'\u001B[36m{title}\u001B[0m')
 
 
 def get_course(course_name) -> Course or None:
@@ -21,10 +21,10 @@ def get_course(course_name) -> Course or None:
         if not title:
             continue
         # TODO: consider using regex for finding a matching course
-        # TODO: handle mutltiple matching courses
+        # TODO: handle multiple matching courses
         if course_name.lower() in title.lower():
             return Course(title, course.get('href'))
-    print(f"Could not find course with name matching '{course_name}'")
+    print(f"Could not find course with name matching \u001B[31m{course_name}\u001B[0m")
     return None
 
 
