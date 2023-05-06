@@ -84,7 +84,7 @@ class Course:
         for name, resource in self.resources.items():
             # TODO: check, check if resource is actually available for the user
             #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-            print(f"{name} --- type: {resource.type}")
+            print(f"• {name}: {resource.type.__repr__()}")
 
     def list_all_files(self):
         print(f'Listing all available resources for course \u001B[36m{self.name}\u001B[0m')

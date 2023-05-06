@@ -40,7 +40,6 @@ def download(args):
             course = course_retrieval.get_course(course_name)
             resource_names = course.get_matching_resource_names(resource_pattern)
 
-            parallel = False
             with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as download_config_file:
                 config_data = json.load(download_config_file)[0]
                 parallel = config_data.get('parallel_downloads', bool)

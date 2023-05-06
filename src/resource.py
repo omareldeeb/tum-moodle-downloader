@@ -1,6 +1,7 @@
 import os
 import urllib
 import datetime
+from enum import Enum
 
 from dateutil.parser import parse as parsedate
 
@@ -15,6 +16,28 @@ def background(f):
         return asyncio.get_event_loop().run_in_executor(None, f, *args)
 
     return wrapped
+
+
+class ResourceType(Enum):
+    RESOURCE_TYPE_FILE = "file"
+    RESOURCE_TYPE_FOLDER = "folder"
+    RESOURCE_TYPE_ASSIGNMENT = "assignment"
+    RESOURCE_TYPE_URL = "url"
+    RESOURCE_TYPE_OTHER = "other"
+
+    def __repr__(self):
+        if self == ResourceType.RESOURCE_TYPE_FILE:
+            return "File 📄"
+        if self == ResourceType.RESOURCE_TYPE_FOLDER:
+            return "Folder 📂"
+        if self == ResourceType.RESOURCE_TYPE_ASSIGNMENT:
+            return "Assignment 📝"
+        if self == ResourceType.RESOURCE_TYPE_URL:
+            return "Link 🔗"
+        if self == ResourceType.RESOURCE_TYPE_OTHER:
+            return "Other"
+
+        return "Unknown ❔"
 
 
 class Resource:
@@ -45,17 +68,17 @@ class Resource:
     @staticmethod
     def get_resource_type(resource_div):
         group = resource_div.parent.parent.parent.parent['class']
-        if group == ['activity', 'resource', 'modtype_resource']:
-            return 'file'
-        elif group == ['activity', 'folder', 'modtype_folder']:
-            return 'folder'
-        elif group == ['activity', 'assign', 'modtype_assign']:
-            return 'assignment'
-        elif group == ['activity', 'url', 'modtype_url']:
+        if 'modtype_resource' in group:
+            return ResourceType.RESOURCE_TYPE_FILE
+        elif 'modtype_folder' in group:
+            return ResourceType.RESOURCE_TYPE_FOLDER
+        elif 'modtype_assign' in group:
+            return ResourceType.RESOURCE_TYPE_ASSIGNMENT
+        elif 'modtype_url' in group:
             # TODO what to do with other types?
             if 'pdf' in resource_div.find('img')['src']:
-                return 'url'
-        return 'other (e.g. quiz, forum, ...)'
+                return ResourceType.RESOURCE_TYPE_URL
+        return ResourceType.RESOURCE_TYPE_OTHER
 
     @staticmethod
     def _download_file(url, destination_dir, update_handling):
@@ -144,7 +167,7 @@ class Resource:
 
     @background
     def download_parallel(self, destination_dir, update_handling):
-        Resource.download(self, destination_dir, update_handling)
+        self.download(destination_dir, update_handling)
 
     def download(self, destination_dir, update_handling):
         if not os.path.exists(destination_dir):
@@ -157,13 +180,13 @@ class Resource:
                 return
         # TODO: check, check if resource is actually available for the user
         #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-        print(f"Attempting to download resource \u001B[35m{self.name}\u001B[0m with type \u001B[34;1m{self.type}" +
+        print(f"Attempting to download resource \u001B[35m{self.name}\u001B[0m with type \u001B[34;1m{self.type.__repr__()}" +
               "\u001B[0m")
-        if self.type == 'file' or self.type == 'url':
+        if self.type == ResourceType.RESOURCE_TYPE_FILE or self.type == ResourceType.RESOURCE_TYPE_URL:
             Resource._download_file(self.resource_url, destination_dir, update_handling)
-        elif self.type == 'folder':
+        elif self.type == ResourceType.RESOURCE_TYPE_FOLDER:
             Resource._download_folder(self.resource_url, destination_dir, update_handling)
-        elif self.type == 'assignment':
+        elif self.type == ResourceType.RESOURCE_TYPE_ASSIGNMENT:
             Resource._download_assignment(self.resource_url, destination_dir, update_handling)
         else:
             print(f"Cannot download resource \u001B[35m{self.name}\u001B[0m of type \u001B[34;1m{self.type}\u001B[0m" +
