@@ -41,15 +41,12 @@ def setup_parser():
                                             help=download_command_description)
     download_parser.add_argument('course',
                                  type=str,
-                                 nargs='?',
                                  help="name of the course from which to download")
     download_parser.add_argument('file_pattern',
                                  type=str,
-                                 nargs='?',
                                  help="name pattern for the resources which are to be downloaded")
     download_parser.add_argument('destination',
                                  type=str,
-                                 nargs='?',
                                  help="path at which the download(s) should be stored")
     # Set the function which is to be executed, if the 'download' command is provided
     download_parser.set_defaults(func=moodle_downloader.download)
