@@ -10,7 +10,8 @@ def list_resources(args):
         course_name = args.course
         if course_name == "*":
             # List the names of all available courses
-            course_retrieval.list_courses()
+            courses_list = course_retrieval.list_courses()
+            return courses_list
         else:
             # List all available resources within the specified course
             course = course_retrieval.get_course(course_name)

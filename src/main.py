@@ -73,4 +73,18 @@ if __name__ == "__main__":
 
     # Call the function which is set based on the command provided in the arguments
     # (see 'setup_parser' above for details)
-    args.func(args)
+    # Disabled for complete backup feature
+    # args.func(args)
+    
+    # 1) Finds all courses and saves them in a list
+    args = argparse.Namespace(course = "*")
+    courses_list = moodle_downloader.list_resources(args)
+
+    # 2) Downloads all courses
+    for x in courses_list:
+        # Specify the path where the files should be downloaded to: destination = "/home/user/Moodle-Backup/" (Linux) & "C:\\Users\\<yourUsername>\\Documents\\Moodle-Backup\\" (Windows)
+        args = argparse.Namespace(course = x, file_pattern = ".*", destination = "/home/user/Moodle-Backup/" + x + "/")
+        moodle_downloader.download(args)
+        print("Download abgeschlossen: " + x)
+        
+    print("Ende")

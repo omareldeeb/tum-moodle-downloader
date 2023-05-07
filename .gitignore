@@ -2,3 +2,4 @@ credentials.json
 .idea
 *.pdf
 __pycache__
+.github
