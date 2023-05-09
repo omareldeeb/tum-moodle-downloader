@@ -1,12 +1,29 @@
 [
   {
-    "course_name": "Digitaltechnik",
-    "semester": "WS16_17",
+    "course_name": "Analysis für Informatik",
+    "semester": "WS19_20",
     "rules": [
       {
-        "file_pattern": "*.pdf",
-        "destination": "/Moodle-Backup/",
+        "file_pattern": "Hausaufgabe.*",
+        "destination": "C:\\Users\\<yourUsername>\\Documents\\Uni\\Analysis\\Hausaufgaben",
         "update_handling": "update"
+      },
+      {
+        "file_pattern": ".*E-Test.*",
+        "destination": "C:\\Users\\<yourUsername>\\Documents\\Uni\\Analysis\\E-Tests",
+        "update_handling": "replace"
       }
     ]
-  }]
+  },
+  {
+    "course_name": "Numerisches Programmieren",
+    "semester": "WS19_20",
+    "rules": [
+      {
+        "file_pattern": "(Übungsblatt.*|Musterlösung Blatt.*)",
+        "destination": "C:\\Users\\<yourUsername>\\Documents\\Uni\\NumProg\\Übungen\\",
+        "update_handling": "add"
+      }
+    ]
+  }
+]
