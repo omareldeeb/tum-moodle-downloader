@@ -6,11 +6,13 @@ from course import Course
 
 def list_courses():
     print('Listing available courses: ')
+    courses_list =[]
     for course_div in _get_course_divs():
         course = course_div.find('h3').find('a')
-
         title = course.get('title', None)
+        courses_list.append(title)
         print(f'\u001B[36m{title}\u001B[0m')
+    return courses_list
 
 
 def get_course(course_name) -> Course or None:

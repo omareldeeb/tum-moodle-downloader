@@ -4,13 +4,16 @@ import re
 import globals
 import course_retrieval
 
+import argparse
+
 
 def list_resources(args):
     try:
         course_name = args.course
         if course_name == "*":
             # List the names of all available courses
-            course_retrieval.list_courses()
+            courses_list = course_retrieval.list_courses()
+            return courses_list
         else:
             # List all available resources within the specified course
             course = course_retrieval.get_course(course_name)
@@ -22,7 +25,23 @@ def list_resources(args):
     except:
         # TODO: add logging and log exception info (traceback) to a file
         print("Could not list resources due to an internal error.")
+        
 
+def complete_backup(args):
+    destination = args.destination
+    # 1) Finds all courses and saves them in a list
+    args = argparse.Namespace(course = "*")
+    courses_list = list_resources(args)
+
+    # 2) Downloads all courses
+    for x in courses_list:
+        path = destination + "/"  + x + "/"
+        args = argparse.Namespace(course = x, file_pattern = ".*", destination = path)
+        download(args)
+        print("Downloaded course: " + x)
+        
+    print("Complete Backup finished :-)")
+    
 
 def download(args):
     try:

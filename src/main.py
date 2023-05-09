@@ -19,7 +19,6 @@ def setup_parser():
     list_parser = subparsers.add_parser("list",
                                         description=list_command_description,
                                         help=list_command_description)
-
     # python src/main.py list -f "<course name>"
     list_parser.add_argument('-f', '--files',
                              action='store_true',
@@ -50,6 +49,18 @@ def setup_parser():
                                  help="path at which the download(s) should be stored")
     # Set the function which is to be executed, if the 'download' command is provided
     download_parser.set_defaults(func=moodle_downloader.download)
+    
+    backup_command_description = "Does a complete backup of all files on all courses"
+    backup_parser = subparsers.add_parser("complete_backup",
+                                        description=backup_command_description,
+                                        help=backup_command_description)
+    # python src/main.py complete_backup -f "<course name>"
+    backup_parser.add_argument("destination",
+                             type=str,
+                             default='/home/user/Moodle-Backup/',
+                             help="path at which the download(s) should be stored")
+    backup_parser.set_defaults(func=moodle_downloader.complete_backup)
+    
 
 
 if __name__ == "__main__":
@@ -73,4 +84,5 @@ if __name__ == "__main__":
 
     # Call the function which is set based on the command provided in the arguments
     # (see 'setup_parser' above for details)
+    # Disabled for complete backup feature
     args.func(args)

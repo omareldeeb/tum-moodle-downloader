@@ -1,7 +1,7 @@
 # TUM Moodle Downloader
 
-*A python-built web crawler to automate file downloads off of
-https://www.moodle.tum.de/*
+A python-built web crawler to automate file downloads of
+https://www.moodle.tum.de/
 
 Prerequisites
 ---
@@ -20,6 +20,10 @@ Setup
 
 Quick Start
 ---
+* `$ python3 src/main.py complete_backup destination`  
+to do a full backup on all files in all Moodle courses and
+saves them in the specified destination path
+
 * `$ python3 src/main.py download`  
 to download resources from Moodle based on 
 your configuration in `src/course_config.json` 
@@ -148,9 +152,13 @@ As stated in the debug message `parallel_downloads` makes the logging less reada
 
 Examples
 ---
+* `$ python3 src/main.py complete_backup ~/Documents/Moodle-Backup/`  
+to do a full backup on all files in all Moodle courses and
+saves them in the specified destination path
 
 * `$ python src/main.py list "Analysis für Informatik"`
   will list all resources of the course `Analysis für Informatik` available for download.
+
 * `$ python src/main.py list -f "Analysis für Informatik"`
   will list all **files** of the course `Analysis für Informatik` available for download.
 
