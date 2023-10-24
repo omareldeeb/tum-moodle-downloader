@@ -8,6 +8,8 @@ import tum_moodle_downloader.moodle_downloader as moodle_downloader
 
 def setup_parser():
     arg_parser = argparse.ArgumentParser()
+    # https://github.com/omareldeeb/tum-moodle-downloader/pull/14
+    arg_parser.set_defaults(func=lambda _: arg_parser.print_help())
     subparsers = arg_parser.add_subparsers()
 
     # 'List' subcommand
