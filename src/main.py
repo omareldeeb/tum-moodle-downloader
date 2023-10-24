@@ -8,6 +8,7 @@ import moodle_downloader
 
 # Instantiate the argument parser
 arg_parser = argparse.ArgumentParser()
+arg_parser.set_defaults(func=lambda _: arg_parser.print_help())
 
 
 def setup_parser():
