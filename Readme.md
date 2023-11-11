@@ -26,12 +26,12 @@ your configuration in `course_config.json`
 (see the section below for more information on the configuration)
 
 
-* `$ python -m tum_moodle_downloader.main download course`  
+* `$ python -m tum_moodle_downloader.main download --course COURSE`  
 to download resources from the specified Moodle course based on 
 your configuration in `course_config.json`
 
 
-* `$ python -m tum_moodle_downloader.main download course file_pattern destination`  
+* `$ python -m tum_moodle_downloader.main download --course COURSE --file_pattern FILE_PATTERN --destination DESTINATION`  
 to
 download resources which match the `file_pattern` from `course` to a `destination` path
 
@@ -125,7 +125,7 @@ How the configuration works shall be explained via the following example:
           specified `destination`, if the file already exists locally
     * If nothing is specified for the `update_handling`, existing local files are overridden
 * Note:
-    * Running `$ python -m tum_moodle_downloader.main download "Analysis für Informatik"` downloads only the resources for the course
+    * Running `$ python -m tum_moodle_downloader.main download --course "Analysis für Informatik"` downloads only the resources for the course
       "Analyis für Informatik" based on the configuration file.
     * Use `".*"` as the pattern for the last rule, if you want files for which none of the other rules apply to be
       downloaded.
@@ -154,12 +154,12 @@ Examples
 * `$ python -m tum_moodle_downloader.main list -f "Analysis für Informatik"`
   will list all **files** of the course `Analysis für Informatik` available for download.
 
-* `$ python -m tum_moodle_downloader.main download "Analysis für Informatik" "Hausaufgabe 10" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`
+* `$ python -m tum_moodle_downloader.main download --course "Analysis für Informatik" --file_pattern "Hausaufgabe 10" --destination "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`
   will search the user's courses for `Analysis für Informatik`
   and find a matching course (e.g. "Analysis für Informatik [MA0902]"). In this example, the script will search
   for `Hausaufgabe 10` and find the assignment "Hausaufgabe 10 und Präsenzaufgaben der Woche". The script will then
   navigate to the assignment's page and download the associated file: "Blatt10.pdf", which will then be saved in the
   specified path `~/Documents/Uni/WS19/Analysis/Hausaufgaben`.
 
-* `$ python -m tum_moodle_downloader.main download "Analysis für Informatik" "Hausaufgabe.*" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
+* `$ python -m tum_moodle_downloader.main download --course "Analysis für Informatik" --file_pattern "Hausaufgabe.*" --destination "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
   similar to above, however, finds multiple files that start with `Hausaufgabe` and downloads them **all**.
