@@ -47,9 +47,9 @@ def download(args):
                     print("\u001B[33mParallel downloads active! This leads to unsorted download logging\u001B[0m")
             for resource_name in resource_names:
                 course.download_resource(resource_name, destination_path, parallel, update_handling="update")
-    except:
+    except Exception as e:
         # TODO: add logging and log exception info (traceback) to a file
-        print("Could not download resources due to an internal error.")
+        print(f"Error downloading resources: {e}")
 
 
 def download_via_config(req_course_name=".*", req_file_pattern=".*"):
@@ -91,6 +91,6 @@ def download_via_config(req_course_name=".*", req_file_pattern=".*"):
                         course.download_resource(resource_name, destination, parallel, update_handling)
                         break
         print("Done downloading via download config.")
-    except:
+    except Exception as e:
         # TODO: add logging and log exception info (traceback) to a file
-        print("Could not download via config due to an internal error.")
+        print(f"Error while downloading via config: {e}")
