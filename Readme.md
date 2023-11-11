@@ -20,36 +20,36 @@ Setup
 
 Quick Start
 ---
-* `$ python3 src/main.py download`  
+* `$ python -m tum_moodle_downloader.main download`  
 to download resources from Moodle based on 
-your configuration in `src/course_config.json` 
+your configuration in `course_config.json` 
 (see the section below for more information on the configuration)
 
 
-* `$ python3 src/main.py download course`  
+* `$ python -m tum_moodle_downloader.main download course`  
 to download resources from the specified Moodle course based on 
-your configuration in `src/course_config.json`
+your configuration in `course_config.json`
 
 
-* `$ python3 src/main.py download course file_pattern destination`  
+* `$ python -m tum_moodle_downloader.main download course file_pattern destination`  
 to
 download resources which match the `file_pattern` from `course` to a `destination` path
 
 
-* `$ python3 src/main.py list [course]`
+* `$ python -m tum_moodle_downloader.main list [course]`
 to list available resources of the specified `course` or, if no course is specified, list available courses for your
 Moodle account
 
 
-* `$ python3 src/main.py -h`  
+* `$ python -m tum_moodle_downloader.main -h`  
 for general help on how to use the program
 
 
-* `$ python3 src/main.py list -h`  
+* `$ python -m tum_moodle_downloader.main list -h`  
 for help concerning the `list` command
 
 
-* `$ python3 src/main.py download -h`  
+* `$ python -m tum_moodle_downloader.main download -h`  
 for help concerning the `download` command
 
 
@@ -102,7 +102,7 @@ How the configuration works shall be explained via the following example:
 ]
 ```
 
-* Upon running `$ python src/main.py download` the program goes through the configuration objects for the different
+* Upon running `$ python -m tum_moodle_downloader.main download` the program goes through the configuration objects for the different
   courses one by one. For each course all available resources are checked against the rules specified for the course. If
   a resource name matches a pattern specified in one of the rules, the resource is downloaded to the destination path
   defined by that rule (no other rules are applied to that resource afterwards). If the resource already exists locally,
@@ -125,7 +125,7 @@ How the configuration works shall be explained via the following example:
           specified `destination`, if the file already exists locally
     * If nothing is specified for the `update_handling`, existing local files are overridden
 * Note:
-    * Running `$ python src/main.py download "Analysis für Informatik"` downloads only the resources for the course
+    * Running `$ python -m tum_moodle_downloader.main download "Analysis für Informatik"` downloads only the resources for the course
       "Analyis für Informatik" based on the configuration file.
     * Use `".*"` as the pattern for the last rule, if you want files for which none of the other rules apply to be
       downloaded.
@@ -149,17 +149,17 @@ As stated in the debug message `parallel_downloads` makes the logging less reada
 Examples
 ---
 
-* `$ python src/main.py list "Analysis für Informatik"`
+* `$ python -m tum_moodle_downloader.main list "Analysis für Informatik"`
   will list all resources of the course `Analysis für Informatik` available for download.
-* `$ python src/main.py list -f "Analysis für Informatik"`
+* `$ python -m tum_moodle_downloader.main list -f "Analysis für Informatik"`
   will list all **files** of the course `Analysis für Informatik` available for download.
 
-* `$ python src/main.py download "Analysis für Informatik" "Hausaufgabe 10" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`
+* `$ python -m tum_moodle_downloader.main download "Analysis für Informatik" "Hausaufgabe 10" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`
   will search the user's courses for `Analysis für Informatik`
   and find a matching course (e.g. "Analysis für Informatik [MA0902]"). In this example, the script will search
   for `Hausaufgabe 10` and find the assignment "Hausaufgabe 10 und Präsenzaufgaben der Woche". The script will then
   navigate to the assignment's page and download the associated file: "Blatt10.pdf", which will then be saved in the
   specified path `~/Documents/Uni/WS19/Analysis/Hausaufgaben`.
 
-* `$ python src/main.py download "Analysis für Informatik" "Hausaufgabe.*" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
+* `$ python -m tum_moodle_downloader.main download "Analysis für Informatik" "Hausaufgabe.*" "~/Documents/Uni/WS19/Analysis/Hausaufgaben"`  
   similar to above, however, finds multiple files that start with `Hausaufgabe` and downloads them **all**.

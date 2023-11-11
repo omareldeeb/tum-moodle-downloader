@@ -1,14 +1,13 @@
+import asyncio
 import os
 import urllib
+from dateutil.parser import parse as parsedate
 import datetime
 from enum import Enum
 
-from dateutil.parser import parse as parsedate
-
 from bs4 import BeautifulSoup
 
-import globals
-import asyncio
+import tum_moodle_downloader.globals as globals
 
 
 def background(f):

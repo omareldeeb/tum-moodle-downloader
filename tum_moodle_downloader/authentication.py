@@ -1,4 +1,5 @@
 import requests
+
 from bs4 import BeautifulSoup
 
 AUTH_URL = 'https://www.moodle.tum.de/Shibboleth.sso/Login?providerId=https://tumidp.lrz.de/idp/shibboleth&target' \

@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
-import globals
-from course import Course
+from .course import Course
+import tum_moodle_downloader.globals as globals
 
 
 def list_courses():

@@ -3,8 +3,8 @@ import re
 
 from bs4 import BeautifulSoup
 
-import globals
-from resource import Resource
+import tum_moodle_downloader.globals as globals
+from .resource import Resource, ResourceType
 
 
 class Course:
@@ -84,22 +84,22 @@ class Course:
         for name, resource in self.resources.items():
             # TODO: check, check if resource is actually available for the user
             #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-            print(f"• {name}: {resource.type.__repr__()}")
+            print(f"• {name}: {repr(resource.type)}")
 
     def list_all_files(self):
-        print(f'Listing all available resources for course \u001B[36m{self.name}\u001B[0m')
+        print(f'Listing all available files for course \u001B[36m{self.name}\u001B[0m')
         for name, resource in self.resources.items():
-            if resource.type == "file":
+            if resource.type == ResourceType.RESOURCE_TYPE_FILE:
                 # TODO: check, check if resource is actually available for the user
                 #  (see: https://github.com/NewLordVile/tum-moodle-downloader/issues/11)
-                print(f"{name} --- type: {resource.type}")
+                print(f"{name} --- type: {repr(resource.type)}")
 
     def list_latest_resources(self):
         print('Listing latest resources')
         if len(self.latest_resources) == 0:
             print('No resources categorized as "latest" found.')
         for resource in self.latest_resources:
-            print(f"{resource.name} --- type: {resource.type}")
+            print(f"{resource.name} --- type: {repr(resource.type)}")
 
     def get_matching_resource_names(self, resource_pattern=".*"):
         resource_pattern = re.compile(resource_pattern)

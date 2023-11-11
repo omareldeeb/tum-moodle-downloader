@@ -1,34 +1,36 @@
 import argparse
 import json
 
-import globals
-import authentication
-import credential_handler
-import moodle_downloader
-
-# Instantiate the argument parser
-arg_parser = argparse.ArgumentParser()
-
+import tum_moodle_downloader.globals as globals
+import tum_moodle_downloader.authentication as authentication
+import tum_moodle_downloader.credential_handler as credential_handler
+import tum_moodle_downloader.moodle_downloader as moodle_downloader
 
 def setup_parser():
-    # Add subparsers for the different available commands
+    arg_parser = argparse.ArgumentParser()
     subparsers = arg_parser.add_subparsers()
 
-    list_command_description = "List available resources of the specified \"course\" " \
-                               "or, if no course is specified, list available courses"
-    list_parser = subparsers.add_parser("list",
-                                        description=list_command_description,
-                                        help=list_command_description)
+    # List subcommand
+    list_command_description = "List available resources of the specified course or, if no course is specified, list available courses"
+    list_parser = subparsers.add_parser(
+        "list",
+        description=list_command_description,
+        help=list_command_description
+    )
 
     # python src/main.py list -f "<course name>"
-    list_parser.add_argument('-f', '--files',
-                             action='store_true',
-                             help="only prints available files")
-    list_parser.add_argument("course",
-                             type=str,
-                             nargs='?',
-                             default='*',
-                             help="name of the course of which the resources are to be listed")
+    list_parser.add_argument(
+        '-f', '--files',
+        action='store_true',
+        help="only print available files"
+    )
+    list_parser.add_argument(
+        "course",
+        type=str,
+        nargs='?',
+        default='*',
+        help="name of the course of which the resources are to be listed"
+    )
     
     # Set the function which is to be executed, if the 'list' command is provided
     list_parser.set_defaults(func=moodle_downloader.list_resources)
@@ -51,9 +53,11 @@ def setup_parser():
     # Set the function which is to be executed, if the 'download' command is provided
     download_parser.set_defaults(func=moodle_downloader.download)
 
+    return arg_parser
 
-if __name__ == "__main__":
-    setup_parser()
+
+def main():
+    arg_parser = setup_parser()
     args = arg_parser.parse_args()
 
     with open(globals.DOWNLOAD_CONFIG_PATH, mode='r', encoding='utf-8') as main_config:
@@ -74,3 +78,6 @@ if __name__ == "__main__":
     # Call the function which is set based on the command provided in the arguments
     # (see 'setup_parser' above for details)
     args.func(args)
+
+if __name__ == "__main__":
+    main()

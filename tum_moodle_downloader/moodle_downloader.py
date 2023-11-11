@@ -1,8 +1,8 @@
 import json
 import re
 
-import globals
-import course_retrieval
+import tum_moodle_downloader.globals as globals
+import tum_moodle_downloader.course_retrieval as course_retrieval
 
 
 def list_resources(args):
@@ -19,9 +19,9 @@ def list_resources(args):
                     course.list_all_files()
                 else:
                     course.list_all_resources()
-    except:
+    except Exception as e:
         # TODO: add logging and log exception info (traceback) to a file
-        print("Could not list resources due to an internal error.")
+        print(f"Error listing resources: {e}")
 
 
 def download(args):

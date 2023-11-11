@@ -2,7 +2,7 @@ import os
 import json
 from getpass import getpass
 
-from globals import CREDENTIALS_PATH
+from .globals import CREDENTIALS_PATH
 
 
 def get_credentials():
